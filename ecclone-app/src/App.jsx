@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/common/NavBar";
 import Footer from "./components/common/Footer";
@@ -7,6 +7,7 @@ import SignUp from "./components/pages/SignUp";
 import Home from "./components/pages/Home";
 import Shop from "./components/pages/Shop";
 import Product from "./components/pages/Product";
+import { useAxios } from "./components/customHooks/useAxios";
 
 function App() {
   /////////
@@ -15,6 +16,21 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [openShopMenu, setOpenShopMenu] = useState(false);
+
+  //////////
+  // test useAxios
+  //////////
+  const { response, loading, error, fetchData } = useAxios();
+
+  useEffect(() => {
+    let axiosParam = {
+      method: "GET",
+      url: "/user/allUsersNoAuth",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetchData(axiosParam);
+  }, []);
 
   ///////////
   // handlers
@@ -48,7 +64,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/shop" element={<Shop />}></Route>
-          <Route path="/product" element={<Product />}></Route>
+          <Route path="/product/:productName" element={<Product />}></Route>
         </Routes>
       </div>
 

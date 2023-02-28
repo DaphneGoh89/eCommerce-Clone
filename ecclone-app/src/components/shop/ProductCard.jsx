@@ -1,37 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
+import ProductColor from "./ProductColor";
 
 const ProductCard = ({
   category,
-  product_code,
-  product_name,
+  productCode,
+  productName,
   currency,
   price,
   images,
-  product_colors,
+  colors,
+  navigateToProduct,
 }) => {
-  let colors = ["#000000", "#ffffff", "#fea9cb"];
+  const [imageDisplay, setImageDisplay] = useState("mainDisplay");
+
   return (
-    <div className="">
+    <div
+      className="cursor-pointer"
+      onClick={() => navigateToProduct(productName)}
+    >
       <img
-        src={`src/assets/images/hy5532-014_msousv0o9urzhxyh.webp`}
+        src={`${images[imageDisplay]}`}
         className="w-full aspect-auto"
+        onMouseEnter={() => setImageDisplay("hoverDisplay")}
+        onMouseLeave={() => setImageDisplay("mainDisplay")}
       ></img>
       <div className="text-xxs pt-4">
         {/* product category */}
-        <p className="tracking-widest text-fontExtraLightGrey pb-0.5">PANTS</p>
+        <p className="tracking-widest text-fontExtraLightGrey uppercase pb-0.5">
+          {category}
+        </p>
         {/* product name */}
-        <p className="pb-2">Christal Shoulder Padded Blazer</p>
+        <p className="capitalize pb-2">{productName}</p>
         {/* product price */}
-        <p className="pb-2">S$ 35.00</p>
+        <p className="pb-2">S$ {(Math.round(price * 100) / 100).toFixed(2)}</p>
         {/* product colors */}
-        <div className="flex flex-row space-x-3">
+        <div className="flex flex-row space-x-3 mb-4">
           {colors.map((color, index) => {
             return (
-              <div
+              <ProductColor
                 key={index}
-                className={`w-2.5 h-2.5 rounded-full border-[1px] border-fontDarkGrey cursor-pointer`}
-                style={{ background: `${color}` }}
-              ></div>
+                quantity={color.quantity}
+                hexColor={color.hexColor}
+              />
             );
           })}
         </div>

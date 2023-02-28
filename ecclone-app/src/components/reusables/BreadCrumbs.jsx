@@ -1,24 +1,45 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { CgFormatSlash } from "react-icons/cg";
 
 export default function BreadCrumbs() {
   const location = useLocation();
 
-  console.log("Breadcrumbs", location);
   let currentLink = "";
+  let path;
+  // Default: append link to <Home /> and <Shop />
+  if (location.pathname !== "/shop") {
+    path = `home/shop/${location.pathname}`;
+  } else {
+    path = `home/${location.pathname}`;
+  }
 
-  const crumbs = location.pathname
-    .split("/")
-    .filter((crumb) => crumb !== "")
-    .map((crumb) => {
-      currentLink = +`${crumb}`;
+  let pathArray = path.split("/").filter((crumb) => crumb !== "");
 
-      return (
-        <div key={crumb}>
-          <Link to={currentLink}>{crumb}</Link>
-        </div>
-      );
-    });
+  // Format crumbs
+  const crumbs = pathArray.map((crumb, index) => {
+    currentLink = +`${crumb}`;
+    return (
+      <div
+        className={`text-xxs my-2 capitalize flex flex-row justify-center items-center`}
+        key={crumb}
+      >
+        <Link
+          to={`${
+            crumb === "home" ? "/" : crumb === "shop" ? "/shop" : currentLink
+          }`}
+          className="mr-3"
+        >
+          {crumb.replace(/%20/g, " ")}
+        </Link>
+        {index !== pathArray.length - 1 ? (
+          <CgFormatSlash className="mr-3" />
+        ) : (
+          ""
+        )}
+      </div>
+    );
+  });
 
-  return <div>{crumbs}</div>;
+  return <div className="flex flex-row">{crumbs}</div>;
 }
