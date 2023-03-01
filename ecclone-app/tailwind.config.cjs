@@ -17,6 +17,7 @@ module.exports = {
       },
       fontSize: {
         xxs: "0.65rem",
+        xxxs: "0.6rem",
       },
       colors: {
         bgWhite: "#FDFDFD",
@@ -28,6 +29,13 @@ module.exports = {
         fontLightGrey: "#4C504D",
         fontExtraLightGrey: "#959494",
         btnTealGreen: "#203737",
+        alertWarningBg: "#FEF2E0",
+        alertWarningFont: "#AC673B",
+        alertOOSBg: "#EEEEEE",
+        alertOOSFont: "#595959",
+        alertInfoBg: "#EAEFE7",
+        alertPinkInfoBg: "#F4E9E4",
+        alertInfoFont: "#5C8167",
       },
       animation: {
         fadeIn: "fadeIn 1s ease-in forwards",

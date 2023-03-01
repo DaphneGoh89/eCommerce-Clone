@@ -80,7 +80,9 @@ const Pagination = ({
 
           return (
             <li
-              className={`border-[1px] text-xxs rounded mr-2 w-6 h-6 leading-6 text-center`}
+              className={`border-[1px] text-xxs rounded mr-2 w-6 h-6 leading-6 text-center ${
+                index + 1 === currentPage ? "border-black" : ""
+              }`}
               key={index}
               onClick={() => onPageChange(pageNumber)}
             >
@@ -92,7 +94,7 @@ const Pagination = ({
         {/* Go to next page */}
         <li
           onClick={onNext}
-          className={`${
+          className={`mr-2 ${
             currentPage === lastPage ? "pointer-events-none opacity-30" : ""
           }`}
         >

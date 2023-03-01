@@ -11,7 +11,6 @@ const InputField = ({
   labelText,
   labelStyle,
 }) => {
-  console.log("label text", labelText);
   return (
     <div className="flex items-center tracking-normal mb-4 pb-1 border-b-2 text-xs md:text-sm xl:text-base">
       <label htmlFor={id} className={labelText == undefined ? "" : "mr-4"}>
