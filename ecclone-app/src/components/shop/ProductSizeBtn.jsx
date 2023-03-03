@@ -16,7 +16,7 @@ const ProductSizeBtn = ({
     >
       <button
         className={`border-[1px] border-black w-14 h-7 rounded-md uppercase ${
-          quantity === 0
+          parseInt(quantity) === 0
             ? "border-gray-300 text-gray-300 cursor-not-allowed after:absolute after:block after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:origin-center after:rotate-[68deg] after:h-[calc(200%)] after:border-[0.5px] after-bg-gray-300"
             : ""
         } ${sizeSelected === size ? "bg-btnTealGreen text-white" : ""}`}

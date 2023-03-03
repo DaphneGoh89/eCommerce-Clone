@@ -1,54 +1,150 @@
 import React, { useState, useEffect, useReducer } from "react";
-import BreadCrumbs from "../reusables/BreadCrumbs";
-import ProductColor from "../shop/ProductColor";
-import ProductSizeBtn from "../shop/ProductSizeBtn";
-import ProductQtyAlert from "../shop/ProductQtyAlert";
-import ButtonSubmit from "../reusables/ButtonSubmit";
+import BreadCrumbs from "../Reusables/BreadCrumbs";
+import ProductColor from "../Shop/ProductColor";
+import ProductSizeBtn from "../Shop/ProductSizeBtn";
+import ProductQtyAlert from "../Shop/ProductQtyAlert";
+import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
+import axios from "axios";
 
 function getImageUrl(name) {
   return new URL(`../../assets/images/${name}.webp`, import.meta.url).href;
 }
 
 const dummyProduct = {
-  productCode: "LN1278",
-  productName: "Galilea A-line Pleat Dress",
+  productCode: "th2266",
+  productName: "Lailee Knit Camisole",
+  mainCat: "Apparel & Accessories",
+  subcategory: "Tops",
   currency: "SGD",
-  price: 55.5,
+  price: "49.00",
   stockOnHand: [
-    { colorName: "Dusty Pink", hexColor: "#E6D6D9", size: "xs", quantity: 0 },
-    { colorName: "Dusty Pink", hexColor: "#E6D6D9", size: "s", quantity: 0 },
-    { colorName: "Dusty Pink", hexColor: "#E6D6D9", size: "m", quantity: 0 },
-    { colorName: "Dusty Pink", hexColor: "#E6D6D9", size: "l", quantity: 0 },
-    { colorName: "Dusty Pink", hexColor: "#E6D6D9", size: "xl", quantity: 0 },
-    { colorName: "White", hexColor: "#FFFFFF", size: "xs", quantity: 0 },
-    { colorName: "White", hexColor: "#FFFFFF", size: "s", quantity: 0 },
-    { colorName: "White", hexColor: "#FFFFFF", size: "M", quantity: 0 },
-    { colorName: "White", hexColor: "#FFFFFF", size: "l", quantity: 0 },
-    { colorName: "White", hexColor: "#FFFFFF", size: "xl", quantity: 0 },
-    { colorName: "White", hexColor: "#FFFFFF", size: "xxl", quantity: 0 },
+    {
+      colorName: "White",
+      hexColor: "#ffffff",
+      size: "l",
+      quantity: "5",
+    },
+    {
+      colorName: "White",
+      hexColor: "#ffffff",
+      size: "m",
+      quantity: "15",
+    },
+    {
+      colorName: "White",
+      hexColor: "#ffffff",
+      size: "s",
+      quantity: "10",
+    },
+    {
+      colorName: "White",
+      hexColor: "#ffffff",
+      size: "xl",
+      quantity: 0,
+    },
+    {
+      colorName: "White",
+      hexColor: "#ffffff",
+      size: "xs",
+      quantity: "10",
+    },
+    {
+      colorName: "Lavender",
+      hexColor: "#C49BC9",
+      size: "l",
+      quantity: "5",
+    },
+    {
+      colorName: "Lavender",
+      hexColor: "#C49BC9",
+      size: "m",
+      quantity: "15",
+    },
+    {
+      colorName: "Lavender",
+      hexColor: "#C49BC9",
+      size: "s",
+      quantity: "10",
+    },
+    {
+      colorName: "Lavender",
+      hexColor: "#C49BC9",
+      size: "xl",
+      quantity: "0",
+    },
+    {
+      colorName: "Lavender",
+      hexColor: "#C49BC9",
+      size: "xs",
+      quantity: "10",
+    },
+    {
+      colorName: "Black",
+      hexColor: "#000000",
+      size: "l",
+      quantity: "5",
+    },
+    {
+      colorName: "Black",
+      hexColor: "#000000",
+      size: "m",
+      quantity: "15",
+    },
+    {
+      colorName: "Black",
+      hexColor: "#000000",
+      size: "s",
+      quantity: "10",
+    },
+    {
+      colorName: "Black",
+      hexColor: "#000000",
+      size: "xl",
+      quantity: "0",
+    },
+    {
+      colorName: "Black",
+      hexColor: "#000000",
+      size: "xs",
+      quantity: "10",
+    },
   ],
   images: [
     {
       colorName: "White",
-      hexColor: "#FFFFFF",
+      hexColor: "#ffffff",
       imgArray: [
-        "ln1278-031_7n5bbpqtvdnrosxo",
-        "ln1278-031-1_yyeuiovmdny49cwp",
-        "ln1278-031-2_kxlbelixewm7chlj",
-        "ln1278-031-3_lyy2pxiextj2z6cs",
-        "ln1278-031-4_rtqle2pjrscjydlj",
+        "th2266-031_fyyylr0ycoqbssr8",
+        "th2266-031-1_t7memjuyxjemusvq",
+        "th2266-031-2_ffbh9wzxzgzubxvf",
+        "th2266-031-3_nd7m0pppalnkxomk",
+        "th2266-031-4_vrxg6wxxhmmqrqb9",
+        "th2266-031-5_y6sh53eab5uyoe1n",
+        "th2266-031-6_kayi7jrcx109znaw",
       ],
     },
     {
-      colorName: "Dusty Pink",
-      hexColor: "#E6D6D9",
+      colorName: "Black",
+      hexColor: "#000000",
       imgArray: [
-        "ln1278-026_xorme3sldvjzu6vu",
-        "ln1278-026-1_y4jjc2w9fezcz644",
-        "ln1278-026-2_6bhgrhutlikbqvf2",
-        "ln1278-026-3_iucomxc1gygzthhu",
-        "ln1278-026-4_pgdn7t6lnlbv7saz",
+        "th2266-014_ye9w5e8gt4jyiqxk",
+        "th2266-014-1_wfyey4yh0kjst8fp",
+        "th2266-014-2_kqncryvedokdnwst",
+        "th2266-014-3_xefzzxopec3aujk3",
+        "th2266-014-4_qtujkdabrchjwdfa",
+      ],
+    },
+    {
+      colorName: "Lavender",
+      hexColor: "#C49BC9",
+      imgArray: [
+        "th2266-030_aqz1qvchsrr0basj",
+        "th2266-030-1_xr32layt7jhvj8sb",
+        "th2266-030-2_py6ww3jlcezonka2",
+        "th2266-030-3_ray4esf52ci2ooqt",
+        "th2266-030-4_8jzskbowchsmdijy",
+        "th2266-030-5_gqltm015ahoybvh0",
       ],
     },
   ],
@@ -67,13 +163,24 @@ const reducer = (optionState, action) => {
   let imageDisplay = dummyProduct.images.find(
     (item) => item.hexColor === newOptionState.hexColor
   )?.imgArray;
-  return { ...newOptionState, onHand: onHandQty, imgArray: imageDisplay };
+  return {
+    ...newOptionState,
+    onHand: parseInt(onHandQty),
+    imgArray: imageDisplay,
+  };
 };
 
 //////////////////
 // COMPONENT
 //////////////////
 const Product = () => {
+  useEffect(() => {
+    axios
+      .post("http://127.0.0.1:5005/product/:name", { productCode: "th1849" })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
   ///////////////////
   // destructure data from fetch product API call
   ///////////////////
@@ -116,7 +223,7 @@ const Product = () => {
       ) {
         quantityByColor.push({
           hexColor: currentLine.hexColor,
-          quantity: currentLine.quantity,
+          quantity: parseInt(currentLine.quantity),
         });
       } else {
         let i = quantityByColor.findIndex(
@@ -180,7 +287,7 @@ const Product = () => {
         </div>
 
         {/* Product details */}
-        <div>
+        <div className="h-fit sticky top-0">
           {/* Product name display */}
           <h1 className="font-playfair font-bold text-xl tracking-wide mb-5">
             {productName}
@@ -215,7 +322,7 @@ const Product = () => {
 
           {/* Size selection display */}
           <div className="text-xs mb-5">
-            <p className="mb-2">Size: </p>
+            <p className="mb-1">Size: </p>
             <div className="flex flex-wrap">
               {productSizes.map((item, index) => {
                 return (

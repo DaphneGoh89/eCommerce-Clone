@@ -20,7 +20,7 @@ const ProductQtyAlert = ({ quantity }) => {
           : "IN STOCK"}
       </p>
       <div
-        className={`flex flex-row flex-wrap items-center bg-alertPinkInfoBg w-fit rounded-sm px-2 py-1 mb-3 ${
+        className={`flex flex-row justify-center items-center bg-alertPinkInfoBg w-fit rounded-sm px-4 py-2.5 mb-3 ${
           quantity !== 0 ? "hidden" : ""
         }`}
       >

@@ -1,7 +1,7 @@
 import React from "react";
-import Heading1 from "../reusables/Heading1";
-import InputField from "../reusables/InputField";
-import ButtonSubmit from "../reusables/ButtonSubmit";
+import Heading1 from "../Reusables/Heading1";
+import InputField from "../Reusables/InputField";
+import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { RxCross1 } from "react-icons/rx";
 
 const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {

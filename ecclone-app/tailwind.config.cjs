@@ -21,6 +21,7 @@ module.exports = {
       },
       colors: {
         bgWhite: "#FDFDFD",
+        bgLightPink: "#F9F0EC",
         bgPink: "#FFCE58",
         bgFooterPink: "#FFCEBC",
         fontMenuPink: "#E78C78",
@@ -36,6 +37,7 @@ module.exports = {
         alertInfoBg: "#EAEFE7",
         alertPinkInfoBg: "#F4E9E4",
         alertInfoFont: "#5C8167",
+        linkTealGreen: "#1F3737",
       },
       animation: {
         fadeIn: "fadeIn 1s ease-in forwards",

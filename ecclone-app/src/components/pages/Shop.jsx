@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
-import BreadCrumbs from "../reusables/BreadCrumbs";
-import ProductCard from "../shop/ProductCard";
-import Pagination from "../shop/Pagination";
-import { dummyProduct } from "../shop/dummyProduct";
+import BreadCrumbs from "../Reusables/BreadCrumbs";
+import ProductCard from "../Shop/ProductCard";
+import Pagination from "../Shop/Pagination";
+import { dummyProduct } from "../Shop/dummyProduct";
 
 const Shop = () => {
   ///////////////

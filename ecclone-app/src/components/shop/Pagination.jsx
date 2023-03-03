@@ -1,5 +1,5 @@
 import React from "react";
-import usePagination from "../customHooks/usePagination";
+import usePagination from "../CustomHooks/usePagination";
 import { MdFirstPage, MdLastPage } from "react-icons/md";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 

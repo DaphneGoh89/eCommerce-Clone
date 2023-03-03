@@ -9,6 +9,7 @@ const NavBar = ({
   handleLoginDisplay,
   openShopMenu,
   setOpenShopMenu,
+  handleBgColor,
 }) => {
   return (
     <nav className="relative flex justify-between bg-bgWhite border-b-[1px] text-xs">
@@ -90,9 +91,14 @@ const NavBar = ({
             <AiOutlineUser />
           </button>
           {/* Shopping cart */}
-          <button className="p-1 rounded-full hover:bg-bgPink ">
-            <AiOutlineShopping />
-          </button>
+          <Link to="/checkout/cart">
+            <button
+              className="p-1 rounded-full hover:bg-bgPink"
+              onClick={() => handleBgColor("bgLightPink")}
+            >
+              <AiOutlineShopping />
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
