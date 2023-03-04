@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import ProductColor from "./ProductColor";
 
+function getImageUrl(name) {
+  return new URL(`../../assets/images/${name}.webp`, import.meta.url).href;
+}
+
 const ProductCard = ({
-  category,
+  subcategory,
   productCode,
   productName,
   currency,
@@ -11,7 +15,7 @@ const ProductCard = ({
   colors,
   navigateToProduct,
 }) => {
-  const [imageDisplay, setImageDisplay] = useState("mainDisplay");
+  const [imageDisplay, setImageDisplay] = useState("main_display");
 
   return (
     <div
@@ -19,15 +23,15 @@ const ProductCard = ({
       onClick={() => navigateToProduct(productName)}
     >
       <img
-        src={`${images[imageDisplay]}`}
+        src={`${getImageUrl(images[imageDisplay])}`}
         className="w-full aspect-auto"
-        onMouseEnter={() => setImageDisplay("hoverDisplay")}
-        onMouseLeave={() => setImageDisplay("mainDisplay")}
+        onMouseEnter={() => setImageDisplay("hover_display")}
+        onMouseLeave={() => setImageDisplay("main_display")}
       ></img>
       <div className="text-xxs pt-4">
         {/* product category */}
         <p className="tracking-widest text-fontExtraLightGrey uppercase pb-0.5">
-          {category}
+          {subcategory}
         </p>
         {/* product name */}
         <p className="capitalize pb-2">{productName}</p>

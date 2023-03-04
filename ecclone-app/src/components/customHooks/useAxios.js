@@ -1,17 +1,27 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+//--------------------------------------------------------------------------
+// Declare axios default baseURL
+//--------------------------------------------------------------------------
 axios.defaults.baseURL = "http://127.0.0.1:5005";
 
-export const useAxios = (axiosParam) => {
-  const [response, setResponse] = useState(undefined);
-  const [error, setError] = useState("");
+//--------------------------------------------------------------------------
+// useAxios hook
+//--------------------------------------------------------------------------
+export const useAxios = (endpoint, requestOption) => {
+  //------------------------------------------------------
+  // States
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async (params) => {
+  //------------------------------------------------------
+  // fetchData function
+  const fetchData = async (endpoint, requestOption) => {
     try {
-      const result = await axios.request(params);
-      setResponse(result.data);
+      const response = await axios(endpoint, requestOption);
+      setData(response.data);
     } catch (error) {
       setError(error);
     } finally {
@@ -20,8 +30,10 @@ export const useAxios = (axiosParam) => {
   };
 
   useEffect(() => {
-    fetchData(axiosParam);
+    fetchData(endpoint, requestOption);
   }, []);
 
-  return { response, error, loading, fetchData };
+  //--------------------------------------------------------
+  // Return
+  return { data, error, loading, fetchData };
 };

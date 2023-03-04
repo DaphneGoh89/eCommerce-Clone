@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Heading1 from "../Reusables/Heading1";
 import InputField from "../Reusables/InputField";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { RxCross1 } from "react-icons/rx";
+import AuthContext from "../Context/AuthContext";
 
 const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
+  //---------------------------------------------------------------------------------------------------
+  // States and Context
+  //---------------------------------------------------------------------------------------------------
+  let { loginUser } = useContext(AuthContext);
+  const [formInput, setFormInput] = useState({
+    loginEmail: "",
+    loginPassword: "",
+  });
+
+  //---------------------------------------------------------------------------------------------------
+  // Functions
+  //---------------------------------------------------------------------------------------------------
   const handleSignUpFormDisplay = () => {
     setShowLogin(false);
     setShowSignUp(true);
   };
+
+  const handleInputChange = (e) => {
+    setFormInput((prevState) => {
+      return { ...prevState, [e.target.name]: e.target.value };
+    });
+  };
+
+  //---------------------------------------------------------------------------------------------------
+  // Render
+  //---------------------------------------------------------------------------------------------------
   return (
     <>
       <div
@@ -16,14 +39,14 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
           showLogin ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Close login form */}
+        {/* -------------------------------- Close Login Form Button --------------------------------------- */}
         <div className="float-right pb-10">
           <RxCross1
             className="cursor-pointer"
             onClick={() => setShowLogin(false)}
           />
         </div>
-        {/* Form - Header */}
+        {/* -------------------------------------- Form - Header ------------------------------------------- */}
         <div className="clear-both flex flex-col justify-center items-left text-center">
           <Heading1 text={"Log In"} />
           <p className="text-xxs md:text-xs ">
@@ -35,29 +58,31 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
               Sign up here!
             </span>
           </p>
-          {/* Form - Body */}
-          <div className="mt-9">
-            <InputField
-              id={"email"}
-              name={"email"}
-              type={"email"}
-              value={""}
-              placeholder={"janedoe@gmail.com"}
-              onChange={"handleChange"}
-            />
-            <InputField
-              id={"password"}
-              name={"password"}
-              type={"password"}
-              value={""}
-              placeholder={"password"}
-              onChange={"handleChange"}
-            />
-          </div>
-          {/* Login Button */}
-          <div className="mt-9">
-            <ButtonSubmit btnText={"LOG IN"} />
-          </div>
+          {/* ------------------------------------ Login Form ----------------------------------------------- */}
+          <form onSubmit={loginUser}>
+            <div className="mt-9">
+              <InputField
+                id={"loginEmail"}
+                name={"loginEmail"}
+                type={"email"}
+                value={formInput.loginEmail}
+                placeholder={"Enter your email here."}
+                onChange={handleInputChange}
+              />
+              <InputField
+                id={"loginPassword"}
+                name={"loginPassword"}
+                type={"password"}
+                value={formInput.loginPassword}
+                placeholder={"Enter password"}
+                onChange={handleInputChange}
+              />
+            </div>
+            {/* ---------------------- Login Button -------------------------- */}
+            <div className="mt-9">
+              <ButtonSubmit btnText={"LOG IN"} />
+            </div>
+          </form>
         </div>
       </div>
     </>

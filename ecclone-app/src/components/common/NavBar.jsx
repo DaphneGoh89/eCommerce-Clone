@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import { AiOutlineUser, AiOutlineShopping } from "react-icons/ai";
 import ShopMenu from "./ShopMenu";
+import AuthContext from "../Context/AuthContext";
 
 const NavBar = ({
   showLogin,
@@ -11,6 +12,10 @@ const NavBar = ({
   setOpenShopMenu,
   handleBgColor,
 }) => {
+  let { name } = useContext(AuthContext);
+
+  //------------------------------------------------------------------------------------------
+  // Render
   return (
     <nav className="relative flex justify-between bg-bgWhite border-b-[1px] text-xs">
       {/* NAV - FIRST PART */}
