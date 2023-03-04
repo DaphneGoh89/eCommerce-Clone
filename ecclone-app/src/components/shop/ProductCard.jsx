@@ -20,7 +20,7 @@ const ProductCard = ({
   return (
     <div
       className="cursor-pointer"
-      onClick={() => navigateToProduct(productName)}
+      onClick={() => navigateToProduct(productName, productCode)}
     >
       <img
         src={`${getImageUrl(images[imageDisplay])}`}

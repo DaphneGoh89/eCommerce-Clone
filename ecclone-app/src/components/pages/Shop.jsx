@@ -27,11 +27,13 @@ const Shop = () => {
 
   //-----------------------------------------------------------------------------------------------
   // onClick of product image -> navigate to <Product /> page
+  // * Only product name will be shown in URL
+  // * Product code (stored as useLocation state) will be passed into JSON body in the product API call
   //-----------------------------------------------------------------------------------------------
   const navigate = useNavigate();
 
-  const navigateToProduct = (productName) => {
-    navigate(`/product/${productName}`);
+  const navigateToProduct = (productName, productCode) => {
+    navigate(`/product/${productName}`, { state: { productCode } });
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -44,6 +46,7 @@ const Shop = () => {
     return data.slice(firstPageIndex, lastPageIndex);
   }, [data, currentPage]);
 
+  //-----------------------------------------------------------------------------------------------
   return (
     <div>
       {!loading && data.length > 0 && (
@@ -54,7 +57,7 @@ const Shop = () => {
             {currentTableData.map((data, index) => {
               return (
                 <ProductCard
-                  key={index}
+                  key={data.productCode}
                   {...data}
                   navigateToProduct={navigateToProduct}
                 />
