@@ -13,15 +13,24 @@ export const useAxios = (endpoint, requestOption) => {
   //------------------------------------------------------
   // States
   const [data, setData] = useState([]);
+  const [actionResponse, setActionResponse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   //------------------------------------------------------
   // fetchData function
   const fetchData = async (endpoint, requestOption) => {
+    setLoading(true);
+    setActionResponse(null);
+    setError(null);
+
     try {
       const response = await axios(endpoint, requestOption);
-      setData(response.data);
+      if (requestOption.method === "POST" || requestOption.method === "GET") {
+        setData(response.data);
+      } else {
+        setActionResponse(response.data);
+      }
     } catch (error) {
       setError(error);
     } finally {
@@ -35,5 +44,5 @@ export const useAxios = (endpoint, requestOption) => {
 
   //--------------------------------------------------------
   // Return
-  return { data, error, loading, fetchData };
+  return { data, actionResponse, error, loading, fetchData };
 };

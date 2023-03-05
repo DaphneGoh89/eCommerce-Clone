@@ -4,50 +4,78 @@ import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import ProductCart from "../Cart/ProductCart";
 
+const dummyProductCart = [
+  {
+    productCode: "hy6144",
+    productName: "Lucienne Relaxed Blazer",
+    productColor: "124",
+    colorName: "White",
+    productSize: "s",
+    currency: "SGD",
+    productPrice: "39.00",
+    quantity: "2",
+    mainDisplay: "hy5532-014_msousv0o9urzhxyh",
+  },
+  {
+    productCode: "hy6144",
+    productName: "Lucienne Relaxed Blazer",
+    productColor: "124",
+    colorName: "White",
+    productSize: "s",
+    currency: "SGD",
+    productPrice: "39.00",
+    quantity: "2",
+    mainDisplay: "hy5532-014_msousv0o9urzhxyh",
+  },
+];
+
 const Cart = () => {
   const [showGst, setShowGst] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
   const [showGiftCard, setShowGiftCard] = useState(false);
-
+  //-------------------------------------------------------------------------------------------------------
+  // Handlers
   const handleClick = () => {};
 
   return (
-    <div className="bg-bgLightPink">
-      {/* CART HEADER */}
+    <div className="">
+      {/* ------------------------------------- Cart Header ---------------------------------------------- */}
       <div className="font-playfair font-bold text-xl tracking-wide py-4">
-        My Shopping Bag (2)
+        My Shopping Bag ({dummyProductCart.length})
       </div>
-      <Link to="/shop">
-        <p className="font-poppins text-xxs text-linkTealGreen underline mt-4 mb-3 hover:no-underline">
-          Continue shopping
-        </p>
-      </Link>
-      <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5">
-        {/* CART ITEMS */}
 
+      <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5">
+        {/* -------------------------- Continue Shopping Link + Cart Items ------------------------------------------- */}
         <div className="col-span-2">
-          <ProductCart />
-          <ProductCart />
-          <ProductCart />
+          <Link to="/">
+            <p className="font-poppins text-xxs text-linkTealGreen underline mb-3 hover:no-underline">
+              Continue shopping
+            </p>
+          </Link>
+          <div>
+            {dummyProductCart.map((item, index) => {
+              return <ProductCart key={index} {...item} />;
+            })}
+          </div>
         </div>
-        {/* ORDER SUMMARY */}
+        {/* ------------------------------------- Order Summary ----------------------------------------------- */}
         <div
           className={`border-[1px] w-full font-poppins text-xxs bg-white py-4 px-6`}
         >
           <p className="text-xs font-semibold tracking-widest mb-3">
             ORDER SUMMARY
           </p>
-          {/* Subtotal */}
+          {/* --- Subtotal --- */}
           <div className="flex flex-row justify-between mb-1.5">
             <p>Subtotal</p>
             <p>S$ 104.90</p>
           </div>
-          {/* Shipping */}
+          {/* --- Shipping --- */}
           <div className="flex flex-row justify-between mb-1.5">
             <p>Shipping & Handling</p>
             <p>S$ 0.00</p>
           </div>
-          {/* GST Accordion*/}
+          {/* --- GST Accordion --- */}
           <div className="flex flex-row justify-between mb-1.5 border-t-[1px] pt-1.5">
             <p>GST (Included)</p>
             <span
@@ -75,7 +103,7 @@ const Cart = () => {
               </svg>
             </span>
           </div>
-          {/* GST Calculation */}
+          {/* --- GST Calculation --- */}
           <div
             className={`flex flex-row justify-between mb-1.5 pt-1.5 ${
               showGst ? "block" : "hidden"
@@ -84,7 +112,7 @@ const Cart = () => {
             <p>GST (8%) (Included)</p>
             <p>S$ 7.77</p>
           </div>
-          {/* Promo Code Accordion */}
+          {/* --- Promo Code Accordion --- */}
           <div className="flex flex-row justify-between mb-1.5 border-t-[1px] pt-1.5">
             <p
               className={`${
@@ -100,7 +128,7 @@ const Cart = () => {
               {showPromo ? <HiMinusSm /> : <HiPlusSm />}
             </p>
           </div>
-          {/* Promo Code Input */}
+          {/* --- Promo Code Input --- */}
           <div className={`${showPromo ? "block mb-2" : "hidden"}`}>
             <div className="flex flex-row justify-between items-center space-x-20 mb-1 pt-1.5">
               <input
@@ -118,7 +146,7 @@ const Cart = () => {
               Only one promo code can be applied per transaction.
             </p>
           </div>
-          {/* Gift Card Accordion */}
+          {/* --- Gift Card Accordion --- */}
           <div className="flex flex-row justify-between mb-1.5 border-t-[1px] pt-1.5">
             <p
               className={`${
@@ -134,7 +162,7 @@ const Cart = () => {
               {showGiftCard ? <HiMinusSm /> : <HiPlusSm />}
             </p>
           </div>
-          {/* Gift Card Input */}
+          {/* --- Gift Card Input --- */}
           <div className={`${showGiftCard ? "block mb-2" : "hidden"}`}>
             <div className="flex flex-row justify-between items-center space-x-20 mb-1 pt-1.5">
               <input
@@ -152,12 +180,12 @@ const Cart = () => {
               Multiple gift cards can be applied per transaction.
             </p>
           </div>
-          {/* Calculate Order Total */}
+          {/* --- Calculate Order Total --- */}
           <div className="text-xs font-bold mb-7 pt-1.5 border-t-[1px] border-fontDarkGrey flex flex-row justify-between">
             <p>Total</p>
             <p>S$ 104.90</p>
           </div>
-          {/* Checkout Button */}
+          {/* --- Checkout Button --- */}
           <ButtonSubmit btnText="CHECKOUT" handleClick={handleClick} />
         </div>
       </div>

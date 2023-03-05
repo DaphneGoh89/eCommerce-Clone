@@ -1,7 +1,7 @@
 import React from "react";
 
 const ProductQtyAlert = ({ quantity }) => {
-  console.log("quantity", quantity);
+  // console.log("quantity", quantity);
   return (
     <div className={`text-xxxs ${quantity === undefined ? "hidden" : ""}`}>
       <p

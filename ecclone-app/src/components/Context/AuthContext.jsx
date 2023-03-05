@@ -6,14 +6,31 @@ const AuthContext = createContext();
 
 export default AuthContext;
 
+//-----------------------------------------------------------------------------------------------
 export const AuthProvider = ({ children }) => {
+  // Get default state from local storage - access token
   const [authToken, setAuthToken] = useState(
     localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null
   );
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(
+    localStorage.getItem("authTokens")
+      ? jwt_decode(
+          JSON.parse(localStorage.getItem("authTokens"))["access_token"]
+        )?.firstName
+      : null
+  );
+  const [userId, setUserId] = useState(
+    localStorage.getItem("authTokens")
+      ? jwt_decode(
+          JSON.parse(localStorage.getItem("authTokens"))["access_token"]
+        )?.userId
+      : null
+  );
 
+  //-------------------------------------------------------------------------
+  // Login User Function
   let loginUser = async (e) => {
     e.preventDefault();
 
@@ -26,9 +43,12 @@ export const AuthProvider = ({ children }) => {
       if (response.status === 200) {
         let data = response.data;
         setAuthToken(data);
-        setUser(jwt_decode(data.access_token));
+
+        // Decode access token
+        let decodedToken = jwt_decode(data.access_token);
+        setUser(decodedToken?.firstName);
+        setUserId(decodedToken?.userId);
         localStorage.setItem("authTokens", JSON.stringify(data));
-        console.log("login data", data);
       } else {
         alert(response.statusText);
       }
@@ -40,6 +60,8 @@ export const AuthProvider = ({ children }) => {
   let contextData = {
     loginUser: loginUser,
     authToken: authToken,
+    user: user,
+    userId: userId,
   };
 
   return (

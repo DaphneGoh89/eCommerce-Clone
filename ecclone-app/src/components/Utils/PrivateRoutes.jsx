@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Outlet, Navigate } from "react-router-dom";
+import AuthContext from "../Context/AuthContext";
 
 const PrivateRoutes = () => {
   // Rest operator takes in the path, element parameter from the parent

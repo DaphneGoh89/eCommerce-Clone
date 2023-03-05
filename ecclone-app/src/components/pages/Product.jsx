@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { useAxios } from "../CustomHooks/useAxios";
 import BreadCrumbs from "../Reusables/BreadCrumbs";
@@ -7,6 +7,7 @@ import ProductSizeBtn from "../Shop/ProductSizeBtn";
 import ProductQtyAlert from "../Shop/ProductQtyAlert";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
+import AuthContext from "../Context/AuthContext";
 
 //--------------------------------------------------------------------------------------------------------
 // Function required for displaying images saved in Assets folder
@@ -27,38 +28,54 @@ const Product = () => {
   //------------------------------------------------------------------------------------------------------
   // States & Hooks
   //------------------------------------------------------------------------------------------------------
-  const { data, loading, error, fetchData } = useAxios();
+  const { data, actionResponse, loading, error, fetchData } = useAxios();
   const param = useParams();
   const location = useLocation();
+  const { productCode } = location.state;
+  const { user, userId: customerId } = useContext(AuthContext);
 
+  const [productData, setProductData] = useState({});
   const [quantityByColor, setQuantityByColor] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
+  const [addToCart, setAddToCart] = useState(false);
+  const [selectedQty, setSelectedQty] = useState(1);
+
+  useEffect(() => {
+    let endpoint = `/product/${param.productName}`;
+
+    let requestOptions = {
+      method: "POST",
+      data: { productCode: productCode },
+    };
+    fetchData(endpoint, requestOptions);
+  }, []);
 
   //--------------------------------------------------------------------------------------------------------
   // Reducer fx - For updating 'optionState' when a new option is selected
   //--------------------------------------------------------------------------------------------------------
   const reducer = (optionState, action) => {
     let newOptionState = { ...optionState, ...action.payload };
-
-    let newColorName = data?.stockOnHand.find(
+    console.log("in my reducer", data);
+    // 1. Find color name for display
+    let newColorName = data?.stockOnHand?.find(
       (item) => item.hexColor === newOptionState.hexColor
     )?.colorName;
 
-    // Find all sizes associated with color option
-    let newSizeOption = data?.stockOnHand.filter(
+    // 2. Find all sizes associated with color option
+    let newSizeOption = data?.stockOnHand?.filter(
       (item) => item.hexColor === newOptionState.hexColor
     );
     setProductSizes(newSizeOption);
 
-    // Find onHand quantity of option selected
-    let onHandQty = data?.stockOnHand.find(
+    // 3. Find onHand quantity of option selected
+    let onHandQty = data?.stockOnHand?.find(
       (item) =>
         item.hexColor === newOptionState.hexColor &&
         item.size === newOptionState.size
     )?.quantity;
 
-    // Find images to display based on option selected
-    let imageDisplay = data?.images.find(
+    // 4. Find images to display based on option selected
+    let imageDisplay = data?.images?.find(
       (item) => item.hexColor === newOptionState.hexColor
     )?.imgArray;
 
@@ -73,6 +90,7 @@ const Product = () => {
     };
   };
 
+  // useReducer - optionState
   const [optionState, dispatchOptionState] = useReducer(reducer, {
     hexColor: "",
     colorName: "",
@@ -85,27 +103,21 @@ const Product = () => {
   // useEffect
   // - [] : fetch product information from server on page loading
   // - [data] : Process data after fetch
+  // - [addToCart] : call 'cart/add' endpoint when user click on 'Add To Bag' button
   //--------------------------------------------------------------------------------------------------------
-  useEffect(() => {
-    let endpoint = `/product/${param.productName}`;
-
-    let requestOptions = {
-      method: "POST",
-      data: { productCode: location.state?.productCode },
-    };
-    fetchData(endpoint, requestOptions);
-  }, []);
 
   useEffect(() => {
     //----------------------------------------------------------------------------------------------
     // If condition - added to prevent execution of code on first render where data is empty array
-    if (isObject(data)) {
+    if (isObject(data) && Object.keys(data).length > 0) {
       //----------------------------------------------------------------------
       // Select the first color option on page load
+      console.log("second useEffect", productData);
+      console.log("second useEffect- Data", data);
       dispatchOptionState({
         payload: {
-          hexColor: data?.stockOnHand[0]?.hexColor,
-          size: data?.stockOnHand[0]?.size,
+          hexColor: data?.stockOnHand[0].hexColor,
+          size: data?.stockOnHand[0].size,
         },
       });
 
@@ -141,6 +153,37 @@ const Product = () => {
       setQuantityByColor(productQtyByColor);
     }
   }, [data]);
+
+  //-------------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    if (addToCart) {
+      let endpoint = `/cart/add`;
+      let cartData = {
+        customerId: customerId,
+        productCode: productCode,
+        productName: data?.productName,
+        productColor: optionState.hexColor,
+        productSize: optionState.size,
+        quantity: selectedQty,
+      };
+      let requestOptions = {
+        method: "PUT",
+        data: { ...cartData },
+      };
+      fetchData(endpoint, requestOptions);
+      setAddToCart(false);
+    }
+  }, [addToCart]);
+
+  //-------------------------------------------------------------------------------------------------------------------
+  // Handlers
+  const handleQtyChange = (e) => {
+    setSelectedQty(e.target.value);
+  };
+
+  const handleAddToCart = () => {
+    setAddToCart(true);
+  };
 
   //-------------------------------------------------------------------------------------------------------------------
   return (
@@ -229,6 +272,8 @@ const Product = () => {
                   id="quantity"
                   name="quantity"
                   data-te-select-init
+                  value={selectedQty}
+                  onChange={handleQtyChange}
                   className="border-[1px] border-fontDarkGrey w-20 py-0.5 rounded-sm text-center focus:outline-none"
                 >
                   <option value="1">1</option>
@@ -244,7 +289,10 @@ const Product = () => {
 
               {/* Add to cart / mailing list button */}
               <div className="flex flex-row space-x-2">
-                <ButtonSubmit btnText="ADD TO BAG" />
+                <ButtonSubmit
+                  btnText="ADD TO BAG"
+                  handleClick={handleAddToCart}
+                />
                 <button className="border-[1px] border-fontExtraLightGrey rounded px-3">
                   <MdOutlineFavoriteBorder />
                 </button>

@@ -13,6 +13,7 @@ import Cart from "./components/Pages/Cart";
 import Checkout from "./components/Pages/Checkout";
 import Admin from "./components/Pages/Admin";
 import CustomerProfile from "./components/Pages/CustomerProfile";
+import CustomerMenu from "./components/Pages/CustomerMenu";
 
 // App.jsx
 function App() {
@@ -25,7 +26,7 @@ function App() {
   const [pageBgColor, setPageBgColor] = useState("white");
 
   //-------------------------------------------------------------------------------------
-  // handlers
+  // Handlers
   //-------------------------------------------------------------------------------------
   const handleLoginDisplay = () => {
     setShowLogin(!showLogin);
@@ -68,13 +69,13 @@ function App() {
               <Route path="/home" element={<Home />}></Route>
               <Route path="/" element={<Shop />}></Route>
               <Route path="/product/:productName" element={<Product />}></Route>
-              <Route path="/login" element={<Login />}></Route>
               //---------------------------------------------------------------------
               // Private Routes
               <Route element={<PrivateRoutes />}>
                 <Route path="/admin" element={<Admin />}></Route>
                 <Route path="/profile" element={<CustomerProfile />}></Route>
                 <Route path="/checkout/cart" element={<Cart />}></Route>
+                <Route path="/customermenu" element={<CustomerMenu />}></Route>
               </Route>
             </Routes>
           </div>

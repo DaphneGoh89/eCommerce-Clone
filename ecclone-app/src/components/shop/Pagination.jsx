@@ -43,9 +43,9 @@ const Pagination = ({
   return (
     <>
       {/* Page currentPage of totalPageCount */}
-      <div className="relative flex py-4 items-center">
+      <div className="relative flex pt-20 pb-4 items-center">
         <div className="flex-grow border-t border-[0.5px]"></div>
-        <span className="flex-shrink mx-10 text-gray-400 text-xxs tracking-wider">
+        <span className="flex-shrink mx-10 text-gray-400 text-xxxs tracking-wider">
           Page <span className="mx-1">{currentPage}</span> of{" "}
           <span className="mx-1">{lastPage}</span>
         </span>
@@ -80,7 +80,7 @@ const Pagination = ({
 
           return (
             <li
-              className={`border-[1px] text-xxs rounded mr-2 w-6 h-6 leading-6 text-center ${
+              className={`border-[1px] text-xxxs rounded mr-2 w-6 h-6 leading-6 text-center ${
                 index + 1 === currentPage ? "border-black" : ""
               }`}
               key={index}

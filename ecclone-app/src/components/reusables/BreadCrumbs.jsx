@@ -26,7 +26,7 @@ export default function BreadCrumbs() {
       >
         <Link
           to={`${
-            crumb === "home" ? "/" : crumb === "shop" ? "/shop" : currentLink
+            crumb === "home" ? "/" : crumb === "shop" ? "/" : currentLink
           }`}
           className="mr-3"
         >

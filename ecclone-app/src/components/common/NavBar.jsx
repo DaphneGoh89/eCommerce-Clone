@@ -31,7 +31,7 @@ const NavBar = ({
             onMouseEnter={() => setOpenShopMenu(!openShopMenu)}
             onMouseLeave={() => setOpenShopMenu(!openShopMenu)}
           >
-            <Link to="/shop">
+            <Link to="/">
               <button
                 onClick={() => setOpenShopMenu(true)}
                 className="hover:border-b-2 hover:border-bgPink"
@@ -99,7 +99,7 @@ const NavBar = ({
           <Link to="/checkout/cart">
             <button
               className="p-1 rounded-full hover:bg-bgPink"
-              onClick={() => handleBgColor("bgLightPink")}
+              // onClick={() => handleBgColor("bgLightPink")}
             >
               <AiOutlineShopping />
             </button>
