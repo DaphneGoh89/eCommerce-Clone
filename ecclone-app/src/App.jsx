@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoutes from "./components/Utils/PrivateRoutes";
 import { AuthProvider } from "./components/Context/AuthContext";
+import { DataProvider } from "./components/Context/DataContext";
+import { useAxios } from "./components/CustomHooks/useAxios";
+// Import Components
 import NavBar from "./components/Common/NavBar";
 import Footer from "./components/Common/Footer";
 import Login from "./components/Pages/Login";
@@ -24,6 +27,15 @@ function App() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [openShopMenu, setOpenShopMenu] = useState(false);
   const [pageBgColor, setPageBgColor] = useState("white");
+
+  // useEffect(() => {
+  //   getCustomerCart(customerId);
+  //   console.log("App useEffect", customerCart);
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log("second useEffect", customerCart);
+  // }, [data]);
 
   //-------------------------------------------------------------------------------------
   // Handlers

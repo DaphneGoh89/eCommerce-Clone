@@ -2,11 +2,14 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
+//----------------------------------------------------------------------------------------------
+// Create AuthContext
 const AuthContext = createContext();
 
 export default AuthContext;
 
 //-----------------------------------------------------------------------------------------------
+// Declare AuthProvider
 export const AuthProvider = ({ children }) => {
   // Get default state from local storage - access token
   const [authToken, setAuthToken] = useState(
