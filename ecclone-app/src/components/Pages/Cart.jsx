@@ -1,16 +1,45 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../Context/AuthContext";
 import DataContext from "../Context/DataContext";
+import { useAxios } from "../CustomHooks/useAxios";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import ProductCart from "../Cart/ProductCart";
 
 const Cart = () => {
-  const { customerCart } = useContext(DataContext);
+  const { customerCart, pageRefresh, setPageRefresh } = useContext(DataContext);
+  const { userId: customerId } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { data, actionResponse, loading, error, fetchData } = useAxios();
   const [showGst, setShowGst] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
   const [showGiftCard, setShowGiftCard] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState({});
+
+  //--------------------------------------------------------------------------------------------------------
+  // useEffect - remove item from cart
+
+  useEffect(() => {
+    if (confirmDelete) {
+      let endpoint = `/cart/delete`;
+      let cartData = {
+        customerId: customerId,
+        ...itemToDelete,
+      };
+      let requestOptions = {
+        method: "DELETE",
+        data: { ...cartData },
+      };
+      console.log("cart delete", requestOptions);
+      fetchData(endpoint, requestOptions);
+
+      setPageRefresh(!pageRefresh);
+      setConfirmDelete(false);
+      setItemToDelete({});
+    }
+  }, [confirmDelete]);
 
   //--------------------------------------------------------------------------------------------------------
   // Calculate Cart Total
@@ -26,6 +55,35 @@ const Cart = () => {
     navigate(`/product/${productName}`, { state: { productCode } });
   };
 
+  const handleDelete = (
+    e,
+    productCode,
+    productName,
+    productColor,
+    productSize
+  ) => {
+    console.log(
+      "handleDelete",
+      productCode,
+      productName,
+      productColor,
+      productSize
+    );
+    setItemToDelete((prevState) => {
+      return {
+        ...prevState,
+        productCode: productCode,
+        productName: productName,
+        productColor: productColor,
+        productSize: productSize,
+      };
+    });
+    setConfirmDelete(true);
+    console.log("In delete handler", itemToDelete);
+  };
+
+  //-------------------------------------------------------------------------------------------------------
+  // Render
   return (
     <div className="">
       {/* ------------------------------------- Cart Header ---------------------------------------------- */}
@@ -44,15 +102,21 @@ const Cart = () => {
           <div>
             {customerCart.length > 0 &&
               customerCart.map((item, index) => {
-                return <ProductCart key={index} {...item} />;
+                return (
+                  <ProductCart
+                    key={index}
+                    {...item}
+                    handleDelete={handleDelete}
+                  />
+                );
               })}
           </div>
         </div>
         {/* ------------------------------------- Order Summary ----------------------------------------------- */}
         <div
-          className={`border-[1px] w-full font-poppins text-xxs bg-white py-12 px-6`}
+          className={`border-[1px] w-full font-poppins text-xxs bg-white py-7 px-6`}
         >
-          <p className="text-xs font-semibold tracking-widest mb-3">
+          <p className="text-xs font-semibold tracking-widest mb-5">
             ORDER SUMMARY
           </p>
           {/* --- Subtotal --- */}

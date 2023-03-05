@@ -14,6 +14,7 @@ const ProductCart = ({
   productPrice,
   quantity,
   mainDisplay,
+  handleDelete,
 }) => {
   //------------------------------------------------------------------------
   // Handler
@@ -23,7 +24,7 @@ const ProductCart = ({
   // Render
   return (
     <>
-      <div className="text-xxs flex flex-row space-x-3 pt-4 border-t-[1px] border-fontDarkGrey/30">
+      <div className="text-xxs flex flex-row space-x-3 pt-4 border-t-[1px]">
         {/* ------------------------------------------ Image Display ------------------------------------------- */}
         <img src={getImageUrl(mainDisplay)} className="w-28 aspect-auto"></img>
 
@@ -72,7 +73,14 @@ const ProductCart = ({
       {/* ------------------------------------------ Update Cart ------------------------------------------- */}
       <div className="text-xxxs flex flex-row justify-end space-x-3 my-2">
         <p>Edit</p>
-        <p>Remove</p>
+        <p
+          className="cursor-pointer"
+          onClick={(e) =>
+            handleDelete(e, productCode, productName, productColor, productSize)
+          }
+        >
+          Remove
+        </p>
       </div>
     </>
   );
