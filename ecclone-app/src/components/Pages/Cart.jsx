@@ -1,47 +1,36 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import DataContext from "../Context/DataContext";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import ProductCart from "../Cart/ProductCart";
 
-const dummyProductCart = [
-  {
-    productCode: "hy6144",
-    productName: "Lucienne Relaxed Blazer",
-    productColor: "124",
-    colorName: "White",
-    productSize: "s",
-    currency: "SGD",
-    productPrice: "39.00",
-    quantity: "2",
-    mainDisplay: "hy5532-014_msousv0o9urzhxyh",
-  },
-  {
-    productCode: "hy6144",
-    productName: "Lucienne Relaxed Blazer",
-    productColor: "124",
-    colorName: "White",
-    productSize: "s",
-    currency: "SGD",
-    productPrice: "39.00",
-    quantity: "2",
-    mainDisplay: "hy5532-014_msousv0o9urzhxyh",
-  },
-];
-
 const Cart = () => {
+  const { customerCart } = useContext(DataContext);
+  const navigate = useNavigate();
   const [showGst, setShowGst] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
   const [showGiftCard, setShowGiftCard] = useState(false);
+
+  //--------------------------------------------------------------------------------------------------------
+  // Calculate Cart Total
+  const cartSubTotal = customerCart.reduce((subTotal, item) => {
+    return subTotal + parseFloat(item.productPrice) * parseFloat(item.quantity);
+  }, 0);
+
   //-------------------------------------------------------------------------------------------------------
   // Handlers
   const handleClick = () => {};
+
+  const navigateToProduct = (productName, productCode) => {
+    navigate(`/product/${productName}`, { state: { productCode } });
+  };
 
   return (
     <div className="">
       {/* ------------------------------------- Cart Header ---------------------------------------------- */}
       <div className="font-playfair font-bold text-xl tracking-wide py-4">
-        My Shopping Bag ({dummyProductCart.length})
+        My Shopping Bag ({customerCart.length})
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5">
@@ -53,14 +42,15 @@ const Cart = () => {
             </p>
           </Link>
           <div>
-            {dummyProductCart.map((item, index) => {
-              return <ProductCart key={index} {...item} />;
-            })}
+            {customerCart.length > 0 &&
+              customerCart.map((item, index) => {
+                return <ProductCart key={index} {...item} />;
+              })}
           </div>
         </div>
         {/* ------------------------------------- Order Summary ----------------------------------------------- */}
         <div
-          className={`border-[1px] w-full font-poppins text-xxs bg-white py-4 px-6`}
+          className={`border-[1px] w-full font-poppins text-xxs bg-white py-12 px-6`}
         >
           <p className="text-xs font-semibold tracking-widest mb-3">
             ORDER SUMMARY
@@ -68,7 +58,7 @@ const Cart = () => {
           {/* --- Subtotal --- */}
           <div className="flex flex-row justify-between mb-1.5">
             <p>Subtotal</p>
-            <p>S$ 104.90</p>
+            <p>S$ {(Math.round(cartSubTotal * 100) / 100).toFixed(2)}</p>
           </div>
           {/* --- Shipping --- */}
           <div className="flex flex-row justify-between mb-1.5">
@@ -183,7 +173,7 @@ const Cart = () => {
           {/* --- Calculate Order Total --- */}
           <div className="text-xs font-bold mb-7 pt-1.5 border-t-[1px] border-fontDarkGrey flex flex-row justify-between">
             <p>Total</p>
-            <p>S$ 104.90</p>
+            <p>S$ {(Math.round(cartSubTotal * 100) / 100).toFixed(2)}</p>
           </div>
           {/* --- Checkout Button --- */}
           <ButtonSubmit btnText="CHECKOUT" handleClick={handleClick} />

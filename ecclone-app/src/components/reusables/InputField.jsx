@@ -7,6 +7,7 @@ const InputField = ({
   value,
   placeholder,
   handleChange,
+  disabled,
   inputStyle,
   labelText,
   labelStyle,
@@ -22,7 +23,8 @@ const InputField = ({
         type={type}
         placeholder={placeholder}
         onChange={handleChange}
-        className="flex-grow text-xs focus: outline-none placeholder:text-xs"
+        disabled={disabled}
+        className="flex-grow text-xs focus: outline-none placeholder:text-xs disabled:bg-[#CBD5E1]/40"
       ></input>
     </div>
   );

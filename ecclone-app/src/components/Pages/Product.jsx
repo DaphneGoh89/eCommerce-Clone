@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useReducer, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
+import AuthContext from "../Context/AuthContext";
+import DataContext from "../Context/DataContext";
 import { useAxios } from "../CustomHooks/useAxios";
 import BreadCrumbs from "../Reusables/BreadCrumbs";
 import ProductColor from "../Shop/ProductColor";
@@ -7,7 +9,6 @@ import ProductSizeBtn from "../Shop/ProductSizeBtn";
 import ProductQtyAlert from "../Shop/ProductQtyAlert";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
-import AuthContext from "../Context/AuthContext";
 
 //--------------------------------------------------------------------------------------------------------
 // Function required for displaying images saved in Assets folder
@@ -33,6 +34,7 @@ const Product = () => {
   const location = useLocation();
   const { productCode } = location.state;
   const { user, userId: customerId } = useContext(AuthContext);
+  const { pageRefresh, setPageRefresh } = useContext(DataContext);
 
   const [quantityByColor, setQuantityByColor] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
@@ -110,7 +112,6 @@ const Product = () => {
     if (isObject(data) && Object.keys(data).length > 0) {
       //----------------------------------------------------------------------
       // Select the first color option on page load
-
       dispatchOptionState({
         payload: {
           hexColor: data?.stockOnHand[0].hexColor,
@@ -168,6 +169,8 @@ const Product = () => {
         data: { ...cartData },
       };
       fetchData(endpoint, requestOptions);
+      console.log("product", actionResponse);
+      setPageRefresh(!pageRefresh);
       setAddToCart(false);
     }
   }, [addToCart]);
@@ -293,6 +296,21 @@ const Product = () => {
                 <button className="border-[1px] border-fontExtraLightGrey rounded px-3">
                   <MdOutlineFavoriteBorder />
                 </button>
+              </div>
+
+              {/* Add To Cart Alert */}
+              <div className="mt-9">
+                <p
+                  className={`text-xxs py-3 px-3 ${
+                    actionResponse === null
+                      ? "hidden"
+                      : actionResponse?.status === "Success"
+                      ? "bg-alertInfoBg text-alertInfoFont"
+                      : "bg-alertPinkInfoBg text-alertWarningFont"
+                  }`}
+                >
+                  {actionResponse?.message}
+                </p>
               </div>
             </div>
           </div>

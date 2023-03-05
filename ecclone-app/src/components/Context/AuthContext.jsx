@@ -31,6 +31,8 @@ export const AuthProvider = ({ children }) => {
         )?.userId
       : null
   );
+  const [status, setStatus] = useState(null);
+  const [statusText, setStatusText] = useState(null);
 
   //-------------------------------------------------------------------------
   // Login User Function
@@ -38,6 +40,9 @@ export const AuthProvider = ({ children }) => {
     e.preventDefault();
 
     try {
+      setStatus(null);
+      setStatusText(null);
+
       let response = await axios.post("http://127.0.0.1:5005/user/login", {
         email: e.target.loginEmail.value,
         password: e.target.loginPassword.value,
@@ -52,11 +57,15 @@ export const AuthProvider = ({ children }) => {
         setUser(decodedToken?.firstName);
         setUserId(decodedToken?.userId);
         localStorage.setItem("authTokens", JSON.stringify(data));
-      } else {
-        alert(response.statusText);
       }
+      // Set status text for display
+      setStatus(response.status);
+      setStatusText("Login successful. Happy shopping!");
     } catch (error) {
-      console.log("Error", error.message);
+      setStatus("404");
+      setStatusText(
+        "Oops! Looks like something is incorrect. Please try again!"
+      );
     }
   };
 
@@ -65,6 +74,8 @@ export const AuthProvider = ({ children }) => {
     authToken: authToken,
     user: user,
     userId: userId,
+    status: status,
+    statusText: statusText,
   };
 
   return (

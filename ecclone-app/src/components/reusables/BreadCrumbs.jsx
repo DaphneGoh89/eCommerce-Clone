@@ -41,5 +41,5 @@ export default function BreadCrumbs() {
     );
   });
 
-  return <div className="flex flex-row">{crumbs}</div>;
+  return <div className="flex flex-row mt-3 mb-2">{crumbs}</div>;
 }

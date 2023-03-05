@@ -21,7 +21,7 @@ export const useAxios = (endpoint, requestOption) => {
   // fetchData function
   const fetchData = async (endpoint, requestOption) => {
     setLoading(true);
-    setActionResponse(null);
+    //setActionResponse(null);
     setError(null);
 
     try {
@@ -30,6 +30,7 @@ export const useAxios = (endpoint, requestOption) => {
         setData(response.data);
       } else {
         setActionResponse(response.data);
+        console.log("action response", actionResponse);
       }
     } catch (error) {
       setError(error);

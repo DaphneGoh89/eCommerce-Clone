@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoutes from "./components/Utils/PrivateRoutes";
-import { AuthProvider } from "./components/Context/AuthContext";
-import { DataProvider } from "./components/Context/DataContext";
-import { useAxios } from "./components/CustomHooks/useAxios";
+import AuthContext from "./components/Context/AuthContext";
+import DataContext from "./components/Context/DataContext";
+import axios from "axios";
 // Import Components
 import NavBar from "./components/Common/NavBar";
 import Footer from "./components/Common/Footer";
@@ -23,19 +23,39 @@ function App() {
   //-------------------------------------------------------------------------------------
   // States
   //-------------------------------------------------------------------------------------
+  const { userId: customerId } = useContext(AuthContext);
+  const [customerCart, setCustomerCart] = useState([]);
+  const [pageRefresh, setPageRefresh] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [openShopMenu, setOpenShopMenu] = useState(false);
   const [pageBgColor, setPageBgColor] = useState("white");
+  console.log("App", customerId);
 
-  // useEffect(() => {
-  //   getCustomerCart(customerId);
-  //   console.log("App useEffect", customerCart);
-  // }, []);
+  //-------------------------------------------------------------------------------------
+  // useEffect - automatically fetched from customer cart based on access token available in localStorage
+  //-------------------------------------------------------------------------------------
+  useEffect(() => {
+    let getCustomerCart = async (customerId) => {
+      try {
+        let response = await axios.post("http://127.0.0.1:5005/cart/getCart", {
+          customerId: customerId,
+        });
+        console.log("app refresh", pageRefresh);
+        if (response.status === 200) {
+          let data = response.data;
+          setCustomerCart(data);
+          console.log("customer cart", customerCart);
+        } else {
+          alert(response.statusText);
+        }
+      } catch (error) {
+        console.log("Error", error.message);
+      }
+    };
 
-  // useEffect(() => {
-  //   console.log("second useEffect", customerCart);
-  // }, [data]);
+    getCustomerCart(customerId);
+  }, [customerId, pageRefresh]);
 
   //-------------------------------------------------------------------------------------
   // Handlers
@@ -54,7 +74,13 @@ function App() {
   // Render
   //-------------------------------------------------------------------------------------
   return (
-    <AuthProvider>
+    <DataContext.Provider
+      value={{
+        pageRefresh: pageRefresh,
+        setPageRefresh: setPageRefresh,
+        customerCart: customerCart,
+      }}
+    >
       <div className={`flex flex-col h-screen bg-${pageBgColor}`}>
         <div className="flex-grow">
           <NavBar
@@ -63,6 +89,7 @@ function App() {
             openShopMenu={openShopMenu}
             setOpenShopMenu={setOpenShopMenu}
             handleBgColor={handleBgColor}
+            customerCart={customerCart}
           />
 
           <Login
@@ -95,7 +122,7 @@ function App() {
 
         <Footer />
       </div>
-    </AuthProvider>
+    </DataContext.Provider>
   );
 }
 
