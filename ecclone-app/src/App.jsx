@@ -57,6 +57,12 @@ function App() {
     getCustomerCart(customerId);
   }, [customerId, pageRefresh]);
 
+  //--------------------------------------------------------------------------------------------------------
+  // Calculate Cart Total
+  const cartSubTotal = customerCart.reduce((subTotal, item) => {
+    return subTotal + parseFloat(item.productPrice) * parseFloat(item.quantity);
+  }, 0);
+
   //-------------------------------------------------------------------------------------
   // Handlers
   //-------------------------------------------------------------------------------------
@@ -79,6 +85,7 @@ function App() {
         pageRefresh: pageRefresh,
         setPageRefresh: setPageRefresh,
         customerCart: customerCart,
+        cartSubTotal: cartSubTotal,
       }}
     >
       <div className={`flex flex-col h-screen bg-${pageBgColor}`}>
@@ -113,7 +120,8 @@ function App() {
               <Route element={<PrivateRoutes />}>
                 <Route path="/admin" element={<Admin />}></Route>
                 <Route path="/profile" element={<CustomerProfile />}></Route>
-                <Route path="/checkout/cart" element={<Cart />}></Route>
+                <Route path="/cart" element={<Cart />}></Route>
+                <Route path="/cart/checkout" element={<Checkout />}></Route>
                 <Route path="/customermenu" element={<CustomerMenu />}></Route>
               </Route>
             </Routes>

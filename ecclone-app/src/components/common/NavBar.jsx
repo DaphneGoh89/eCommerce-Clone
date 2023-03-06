@@ -98,7 +98,7 @@ const NavBar = ({
           </button>
           {/* ------------------- Shopping cart --------------------- */}
           <div className="relative">
-            <Link to="/checkout/cart">
+            <Link to="/cart">
               <button
                 className={`p-1 rounded-full hover:bg-bgPink `}
                 // onClick={() => handleBgColor("bgLightPink")}
