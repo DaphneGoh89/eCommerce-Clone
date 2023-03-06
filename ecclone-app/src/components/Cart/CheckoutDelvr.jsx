@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 
-const CheckoutDelvr = () => {
+const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
   const [showHomeDel, setShowHomeDel] = useState(null);
   const [showPickUp, setShowPickUp] = useState(null);
 

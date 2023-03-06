@@ -1,26 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
-import ButtonSubmit from "../Reusables/ButtonSubmit";
 
-const CheckoutSummary = ({ cartSubTotal }) => {
-  const navigate = useNavigate();
+const CheckoutSummary = ({ cartSubTotal, cartGstAmount }) => {
   const [showGst, setShowGst] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
   const [showGiftCard, setShowGiftCard] = useState(false);
 
   //-----------------------------------------------------------------------------------------------
-  // useNavigate
-  const navigateToCheckout = () => {
-    navigate(`checkout`);
-  };
-
-  //-----------------------------------------------------------------------------------------------
   // Render
   return (
-    <div
-      className={`border-[1px] w-full font-poppins text-xxs bg-white py-7 px-6`}
-    >
+    <div className={`font-poppins text-xxs`}>
       <p className="text-xs font-semibold tracking-widest mb-5">
         ORDER SUMMARY
       </p>
@@ -69,7 +58,7 @@ const CheckoutSummary = ({ cartSubTotal }) => {
         }`}
       >
         <p>GST (8%) (Included)</p>
-        <p>S$ 7.77</p>
+        <p>S$ {(Math.round(cartGstAmount * 100) / 100).toFixed(2)}</p>
       </div>
       {/* --- Promo Code Accordion --- */}
       <div className="flex flex-row justify-between mb-1.5 border-t-[1px] pt-1.5">
@@ -142,8 +131,6 @@ const CheckoutSummary = ({ cartSubTotal }) => {
         <p>Total</p>
         <p>S$ {(Math.round(cartSubTotal * 100) / 100).toFixed(2)}</p>
       </div>
-      {/* --- Checkout Button --- */}
-      <ButtonSubmit btnText="CHECKOUT" handleClick={navigateToCheckout} />
     </div>
   );
 };

@@ -30,6 +30,7 @@ function App() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [openShopMenu, setOpenShopMenu] = useState(false);
   const [pageBgColor, setPageBgColor] = useState("white");
+  let gstPercent = 8;
   console.log("App", customerId);
 
   //-------------------------------------------------------------------------------------
@@ -63,6 +64,9 @@ function App() {
     return subTotal + parseFloat(item.productPrice) * parseFloat(item.quantity);
   }, 0);
 
+  const cartGstAmount =
+    (cartSubTotal / (1 + gstPercent / 100)) * (gstPercent / 100);
+
   //-------------------------------------------------------------------------------------
   // Handlers
   //-------------------------------------------------------------------------------------
@@ -86,6 +90,7 @@ function App() {
         setPageRefresh: setPageRefresh,
         customerCart: customerCart,
         cartSubTotal: cartSubTotal,
+        cartGstAmount: cartGstAmount,
       }}
     >
       <div className={`flex flex-col h-screen bg-${pageBgColor}`}>

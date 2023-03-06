@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import FormBaseInput from "../Reusables/FormBaseInput";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 
-const CheckoutAddrForm = () => {
+const CheckoutAddrForm = ({ checkoutInput, handleInputChange }) => {
+  console.log("checkoutAddrForm", checkoutInput);
+  const [testInput, setTestInput] = useState("");
   return (
     <div className="border-[1px] px-6 py-4 mt-4">
       <p className="text-sm mb-4">Shipping Address</p>
@@ -17,6 +19,8 @@ const CheckoutAddrForm = () => {
           type={"text"}
           labelText={"Address & Unit Number *"}
           divStyle={"col-span-2"}
+          value={checkoutInput.shiptoAddrline1}
+          handleChange={handleInputChange}
         ></FormBaseInput>
 
         {/* Shipto Address Line 2 */}
@@ -25,6 +29,8 @@ const CheckoutAddrForm = () => {
           name={"shiptoAddrline2"}
           type={"text"}
           divStyle={"col-span-2"}
+          value={checkoutInput.shiptoAddrline2}
+          handleChange={handleInputChange}
         ></FormBaseInput>
 
         {/* City & State */}
@@ -35,6 +41,8 @@ const CheckoutAddrForm = () => {
             type={"text"}
             labelText={"City *"}
             divStyle={"mr-2"}
+            value={checkoutInput.shiptoCity}
+            handleChange={handleInputChange}
           ></FormBaseInput>
 
           <FormBaseInput
@@ -42,6 +50,8 @@ const CheckoutAddrForm = () => {
             name={"shiptoState"}
             type={"text"}
             labelText={"State / Province"}
+            value={checkoutInput.shiptoState}
+            handleChange={handleInputChange}
           ></FormBaseInput>
         </div>
 
@@ -52,6 +62,8 @@ const CheckoutAddrForm = () => {
           type={"text"}
           labelText={"Zip / Postal Code *"}
           divStyle={"mr-2 col-span-2 md:col-span-1"}
+          value={checkoutInput.shiptoPostal}
+          handleChange={handleInputChange}
         ></FormBaseInput>
       </div>
       {/* -------------------- Contact Info --------------------------- */}
@@ -63,6 +75,8 @@ const CheckoutAddrForm = () => {
             name={"firstName"}
             type={"text"}
             labelText={"First Name *"}
+            value={checkoutInput.firstName}
+            handleChange={handleInputChange}
           ></FormBaseInput>
 
           <FormBaseInput
@@ -70,6 +84,8 @@ const CheckoutAddrForm = () => {
             name={"lastName"}
             type={"text"}
             labelText={"Last Name *"}
+            value={checkoutInput.lastName}
+            handleChange={handleInputChange}
           ></FormBaseInput>
         </div>
 
@@ -81,6 +97,8 @@ const CheckoutAddrForm = () => {
             type={"text"}
             labelText={"Code *"}
             divStyle={"col-span-1"}
+            value={checkoutInput.contactCtryCode}
+            handleChange={handleInputChange}
           ></FormBaseInput>
 
           <FormBaseInput
@@ -89,6 +107,8 @@ const CheckoutAddrForm = () => {
             type={"text"}
             labelText={"Contact Number *"}
             divStyle={"col-span-3"}
+            value={checkoutInput.contactNumber}
+            handleChange={handleInputChange}
           ></FormBaseInput>
         </div>
       </div>

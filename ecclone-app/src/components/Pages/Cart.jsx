@@ -5,10 +5,16 @@ import DataContext from "../Context/DataContext";
 import { useAxios } from "../CustomHooks/useAxios";
 import ProductCart from "../Cart/ProductCart";
 import CheckoutSummary from "../Cart/CheckoutSummary";
+import ButtonSubmit from "../Reusables/ButtonSubmit";
 
 const Cart = () => {
-  const { customerCart, cartSubTotal, pageRefresh, setPageRefresh } =
-    useContext(DataContext);
+  const {
+    customerCart,
+    cartSubTotal,
+    cartGstAmount,
+    pageRefresh,
+    setPageRefresh,
+  } = useContext(DataContext);
   const { userId: customerId } = useContext(AuthContext);
   const navigate = useNavigate();
   const { data, actionResponse, loading, error, fetchData } = useAxios();
@@ -46,6 +52,12 @@ const Cart = () => {
   //-------------------------------------------------------------------------------------------------------
   // Handlers
   const handleClick = () => {};
+
+  //-----------------------------------------------------------------------------------------------
+  // useNavigate
+  const navigateToCheckout = () => {
+    navigate(`checkout`);
+  };
 
   const navigateToProduct = (productName, productCode) => {
     navigate(`/product/${productName}`, { state: { productCode } });
@@ -102,8 +114,13 @@ const Cart = () => {
           </div>
         </div>
         {/* ------------------------------------- Order Summary ----------------------------------------------- */}
-        <div>
-          <CheckoutSummary cartSubTotal={cartSubTotal} />
+        <div className={`border-[1px] w-full bg-white py-7 px-6`}>
+          <CheckoutSummary
+            cartSubTotal={cartSubTotal}
+            cartGstAmount={cartGstAmount}
+          />
+          {/* --- Checkout Button --- */}
+          <ButtonSubmit btnText="CHECKOUT" handleClick={navigateToCheckout} />
         </div>
       </div>
     </div>
