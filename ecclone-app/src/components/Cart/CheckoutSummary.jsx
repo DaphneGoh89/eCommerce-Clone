@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import DataContext from "../Context/DataContext";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 
-const CheckoutSummary = ({ cartSubTotal, cartGstAmount }) => {
+const CheckoutSummary = () => {
+  const { cartSubTotal, cartGstAmount } = useContext(DataContext);
   const [showGst, setShowGst] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
   const [showGiftCard, setShowGiftCard] = useState(false);

@@ -28,9 +28,16 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
       {/* --- Home Delivery Select Option --- */}
       <div className={`${showHomeDel ? "block mb-2" : "hidden"}`}>
         <div className="flex flex-row items-start space-x-4 mb-1 pt-1.5">
-          <input type="radio" id="homeDel" name="deliveryMethod"></input>
+          <input
+            type="radio"
+            id="delivery"
+            name="deliveryMethod"
+            value="delivery"
+            checked={checkoutInput.deliveryMethod === "delivery"}
+            onChange={handleInputChange}
+          ></input>
           <div>
-            <label htmlFor="homeDel">
+            <label htmlFor="delivery">
               Standard Courier (4 - 7 business days) - Free
             </label>
 
@@ -39,17 +46,38 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
               <p className="mb-1">Select your preferred delivery timing</p>
               {/* Anytime */}
               <div className="flex flex-row items-center space-x-2 pb-1">
-                <input type="radio" id="anytime" name="delvryTiming"></input>
+                <input
+                  type="radio"
+                  id="anytime"
+                  name="deliveryTiming"
+                  value="anytime"
+                  checked={checkoutInput.deliveryTiming === "anytime"}
+                  onChange={handleInputChange}
+                ></input>
                 <label htmlFor="anytime">Anytime</label>
               </div>
               {/* Daytime */}
               <div className="flex flex-row items-center space-x-2 pb-1">
-                <input type="radio" id="daytime" name="delvryTiming"></input>
+                <input
+                  type="radio"
+                  id="daytime"
+                  name="deliveryTiming"
+                  value="daytime"
+                  checked={checkoutInput.deliveryTiming === "daytime"}
+                  onChange={handleInputChange}
+                ></input>
                 <label htmlFor="dayTime">Daytime (9am - 6pm)</label>
               </div>
               {/* Evening */}
               <div className="flex flex-row items-center space-x-2 pb-1">
-                <input type="radio" id="evening" name="delvryTiming"></input>
+                <input
+                  type="radio"
+                  id="evening"
+                  name="deliveryTiming"
+                  value="evening"
+                  checked={checkoutInput.deliveryTiming === "evening"}
+                  onChange={handleInputChange}
+                ></input>
                 <label htmlFor="evening">Evening (6pm - 10pm)</label>
               </div>
             </div>
@@ -73,26 +101,54 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
       {/* Self Collection Select Option */}
       <div className={`${showPickUp ? "block mb-2" : "hidden"}`}>
         <div className="flex flex-row items-start space-x-4 mb-1 pt-1.5">
-          <input type="radio" id="homeDel" name="deliveryMethod"></input>
+          <input
+            type="radio"
+            id="selfCollect"
+            name="deliveryMethod"
+            value="selfCollect"
+            checked={checkoutInput.deliveryMethod === "selfCollect"}
+            onChange={handleInputChange}
+          ></input>
           <div>
             <label htmlFor="homeDel">Store collection</label>
 
-            {/* Preferred Delivery Timing */}
+            {/* Preferred Self PickUp Store */}
             <div className="mt-2">
               <p className="mb-1">Select your preferred store location</p>
               {/* Anytime */}
               <div className="flex flex-row items-center space-x-2 pb-1">
-                <input type="radio" id="jem" name="location"></input>
+                <input
+                  type="radio"
+                  id="jem"
+                  name="pickupStore"
+                  value="jem"
+                  checked={checkoutInput.pickupStore === "jem"}
+                  onChange={handleInputChange}
+                ></input>
                 <label htmlFor="jem">JEM</label>
               </div>
               {/* Daytime */}
               <div className="flex flex-row items-center space-x-2 pb-1">
-                <input type="radio" id="somerset" name="location"></input>
+                <input
+                  type="radio"
+                  id="somerset"
+                  name="pickupStore"
+                  value="somerset"
+                  checked={checkoutInput.pickupStore === "somerset"}
+                  onChange={handleInputChange}
+                ></input>
                 <label htmlFor="somerset">Somerset</label>
               </div>
               {/* Evening */}
               <div className="flex flex-row items-center space-x-2 pb-1">
-                <input type="radio" id="funan" name="location"></input>
+                <input
+                  type="radio"
+                  id="funan"
+                  name="pickupStore"
+                  value="funan"
+                  checked={checkoutInput.pickupStore === "funan"}
+                  onChange={handleInputChange}
+                ></input>
                 <label htmlFor="funan">Funan</label>
               </div>
             </div>

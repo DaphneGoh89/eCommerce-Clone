@@ -115,10 +115,7 @@ const Cart = () => {
         </div>
         {/* ------------------------------------- Order Summary ----------------------------------------------- */}
         <div className={`border-[1px] w-full bg-white py-7 px-6`}>
-          <CheckoutSummary
-            cartSubTotal={cartSubTotal}
-            cartGstAmount={cartGstAmount}
-          />
+          <CheckoutSummary />
           {/* --- Checkout Button --- */}
           <ButtonSubmit btnText="CHECKOUT" handleClick={navigateToCheckout} />
         </div>

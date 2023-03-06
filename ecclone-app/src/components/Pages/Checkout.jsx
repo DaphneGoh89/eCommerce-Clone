@@ -1,80 +1,76 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../Context/AuthContext";
 import DataContext from "../Context/DataContext";
+import { useAxios } from "../CustomHooks/useAxios";
 import Heading1 from "../Reusables/Heading1";
 import CheckoutSummary from "../Cart/CheckoutSummary";
 import CheckoutAddrForm from "../Cart/CheckoutAddrForm";
 import CheckoutDelvr from "../Cart/CheckoutDelvr";
 
-/*  Create Order JSON
-{
-  "customerId" : 1,
-  "firstName": "Daphne",
-  "lastName": "Goh",
-  "orderCurrency": "SGD",
-  "orderTotal": 200.00,
-  "giftcard": null,
-  "promocode" : null,
-  "giftcardValue": null,
-  "promocodeValue": null,
-  "shippingFee": null,
-  "gstAmount": 16.00,
-  "shiptoCountry": "SG",
-  "shiptoAddrline1": null,
-  "shiptoAddrline2": null,
-  "shiptoPostal" : null,
-  "contactCtrycode": "+65",
-  "contactNumber": "88151234",
-  "deliveryMethod": "P",
-  "deliveryTiming": null,
-  "paymentMethod": "Paypal",
-  "paymentAmount": 100.00,
-  "orderDetails": [
-      {
-          "productCode": "th1849",
-          "productName": "Dress A",
-          "productColor": "026",
-          "productSize": "s",
-          "orderQty": 2,
-          "unitPrice": 50.00,
-          "lineTotal": 100.00
-      }
-  ]
-}
-
-*/
-
 const Checkout = () => {
   const { userId: customerId, user: firstName } = useContext(AuthContext);
-  const { cartSubTotal } = useContext(DataContext);
-  const [checkoutInput, setCheckoutInput] = useState({
+  const { customerCart, cartSubTotal, cartGstAmount } = useContext(DataContext);
+  const { data, actionResponse, loading, error, fetchData } = useAxios();
+  const [submitOrder, setSubmitOrder] = useState(false);
+
+  // CheckoutInput - initial state object
+  const checkoutInitState = {
     customerId: customerId, // get from AuthContext
     firstName: firstName,
     lastName: "",
-    orderCurrency: "",
+    orderCurrency: "SGD",
     orderTotal: cartSubTotal, // get from DataContext
     giftcard: "",
     promocode: "",
     giftcardValue: 0,
     promocodeValue: 0,
     shippingFee: 0,
-    gstAmount: 0, // get from DataContext
+    gstAmount: cartGstAmount, // get from DataContext
     shiptoCountry: "",
     shiptoAddrline1: "",
     shiptoAddrline2: "",
     shiptoCity: "",
     shiptoState: "",
     shiptoPostal: "",
-    contactCtryCode: "",
+    contactCtrycode: "",
     contactNumber: "",
     deliveryMethod: "",
     deliveryTiming: "",
+    pickupStore: "",
     paymentMethod: "",
     paymentAmount: cartSubTotal, // get from DataContext
-    orderDetails: [], // get customerCart from DataContext
-  });
+    orderDetails: customerCart, // get customerCart from DataContext
+  };
 
+  const [checkoutInput, setCheckoutInput] = useState(checkoutInitState);
+  console.log("checkout customer cart", customerCart);
   console.log("checkout", checkoutInput);
+
+  //--------------------------------------------------------------------------------------------
+  // useEffect
+  useEffect(() => {
+    if (submitOrder) {
+      let endpoint = `/order/createOrder`;
+      let orderData = {
+        ...checkoutInput,
+        customerId: customerId,
+        orderTotal: cartSubTotal,
+        gstAmount: cartGstAmount,
+        paymentAmount: cartSubTotal,
+        orderDetails: customerCart,
+      };
+      let requestOptions = {
+        method: "PUT",
+        data: { ...orderData },
+      };
+      fetchData(endpoint, requestOptions);
+      console.log("Checkout action response", actionResponse);
+
+      // Revert back to original state
+      setSubmitOrder(false);
+      setCheckoutInput(checkoutInitState);
+    }
+  }, [submitOrder]);
 
   //---------------------------------------------------------------------------------------------
   // Handlers
@@ -85,6 +81,12 @@ const Checkout = () => {
     console.log("Inspect checkoutInput state change", checkoutInput);
   };
 
+  const handleFormSubmission = () => {
+    setSubmitOrder(true);
+  };
+
+  //----------------------------------------------------------------------------------------------
+  // Render
   return (
     <div className="my-6 ">
       <Heading1 text={"Choose Shipping Method"} />
@@ -92,7 +94,7 @@ const Checkout = () => {
         <div className="flex flex-col md:flex-row-reverse md:gap-5">
           {/* -------------------------- Checkout Summary ------------------------------------- */}
           <div className="basis-1/3 border-[1px] w-full bg-white py-7 px-6">
-            <CheckoutSummary cartSubTotal={cartSubTotal} />
+            <CheckoutSummary />
           </div>
 
           {/* -------------------------- Checkout Address Form ---------------------------------- */}
@@ -104,6 +106,7 @@ const Checkout = () => {
             <CheckoutAddrForm
               checkoutInput={checkoutInput}
               handleInputChange={handleInputChange}
+              handleFormSubmission={handleFormSubmission}
             />
           </div>
         </div>

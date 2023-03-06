@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import FormBaseInput from "../Reusables/FormBaseInput";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 
-const CheckoutAddrForm = ({ checkoutInput, handleInputChange }) => {
-  console.log("checkoutAddrForm", checkoutInput);
-  const [testInput, setTestInput] = useState("");
+const CheckoutAddrForm = ({
+  checkoutInput,
+  handleInputChange,
+  handleFormSubmission,
+}) => {
   return (
     <div className="border-[1px] px-6 py-4 mt-4">
       <p className="text-sm mb-4">Shipping Address</p>
@@ -92,12 +94,12 @@ const CheckoutAddrForm = ({ checkoutInput, handleInputChange }) => {
         {/* Contact Number */}
         <div className="col-span-4 grid grid-cols-4 gap-2">
           <FormBaseInput
-            id={"contactCtryCode"}
-            name={"contactCtryCode"}
+            id={"contactCtrycode"}
+            name={"contactCtrycode"}
             type={"text"}
             labelText={"Code *"}
             divStyle={"col-span-1"}
-            value={checkoutInput.contactCtryCode}
+            value={checkoutInput.contactCtrycode}
             handleChange={handleInputChange}
           ></FormBaseInput>
 
@@ -113,7 +115,10 @@ const CheckoutAddrForm = ({ checkoutInput, handleInputChange }) => {
         </div>
       </div>
 
-      <ButtonSubmit btnText={"PROCEED TO PAYMENT"} />
+      <ButtonSubmit
+        btnText={"PROCEED TO PAYMENT"}
+        handleClick={handleFormSubmission}
+      />
     </div>
   );
 };
