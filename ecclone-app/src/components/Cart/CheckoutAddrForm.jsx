@@ -25,6 +25,7 @@ const CheckoutAddrForm = ({
           labelText={"Address & Unit Number *"}
           divStyle={"col-span-2"}
           value={checkoutInput.shiptoAddrline1}
+          required={true}
           handleChange={handleInputChange}
         ></FormBaseInput>
 
@@ -47,6 +48,7 @@ const CheckoutAddrForm = ({
             labelText={"City *"}
             divStyle={"mr-2"}
             value={checkoutInput.shiptoCity}
+            required={true}
             handleChange={handleInputChange}
           ></FormBaseInput>
 
@@ -68,6 +70,7 @@ const CheckoutAddrForm = ({
           labelText={"Zip / Postal Code *"}
           divStyle={"mr-2 col-span-2 md:col-span-1"}
           value={checkoutInput.shiptoPostal}
+          required={true}
           handleChange={handleInputChange}
         ></FormBaseInput>
       </div>
@@ -105,6 +108,7 @@ const CheckoutAddrForm = ({
             labelText={"Code *"}
             divStyle={"col-span-1"}
             value={checkoutInput.contactCtrycode}
+            required={true}
             handleChange={handleInputChange}
           ></FormBaseInput>
 
@@ -115,6 +119,7 @@ const CheckoutAddrForm = ({
             labelText={"Contact Number *"}
             divStyle={"col-span-3"}
             value={checkoutInput.contactNumber}
+            required={true}
             handleChange={handleInputChange}
           ></FormBaseInput>
         </div>

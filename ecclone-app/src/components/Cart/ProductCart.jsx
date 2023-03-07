@@ -13,6 +13,7 @@ const ProductCart = ({
   currency,
   productPrice,
   quantity,
+  onHandQty,
   mainDisplay,
   handleDelete,
 }) => {
@@ -26,10 +27,27 @@ const ProductCart = ({
     <>
       <div className="text-xxs flex flex-row space-x-3 pt-4 border-t-[1px]">
         {/* ------------------------------------------ Image Display ------------------------------------------- */}
-        <img src={getImageUrl(mainDisplay)} className="w-28 aspect-auto"></img>
-
+        <div className={`text-center relative`}>
+          <img
+            src={getImageUrl(mainDisplay)}
+            className={`w-28 aspect-auto ${
+              parseInt(onHandQty) <= 0 ? "opacity-50" : ""
+            }`}
+          ></img>
+          <p
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-2 text-xs text-red-900 font-bold ${
+              parseInt(onHandQty) <= 0 ? "" : "hidden"
+            }`}
+          >
+            Out of Stock
+          </p>
+        </div>
         {/* ------------------------------------------ Product Info ------------------------------------------- */}
-        <div className="flex-grow flex flex-row justify-between items-start space-x-3">
+        <div
+          className={`flex-grow flex flex-row justify-between items-start space-x-3 ${
+            parseInt(onHandQty) <= 0 ? "line-through" : ""
+          }`}
+        >
           <div className="flex-grow md:flex md:flex-row md:justify-between">
             <div className="capitalize md:flex-grow sm:w-full">
               <p>{productName}</p>

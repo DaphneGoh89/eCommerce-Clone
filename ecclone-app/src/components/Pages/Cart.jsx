@@ -43,10 +43,6 @@ const Cart = () => {
     }
   }, [confirmDelete]);
 
-  //-------------------------------------------------------------------------------------------------------
-  // Handlers
-  const handleClick = () => {};
-
   //-----------------------------------------------------------------------------------------------
   // useNavigate
   const navigateToCheckout = () => {
@@ -56,6 +52,10 @@ const Cart = () => {
   const navigateToProduct = (productName, productCode) => {
     navigate(`/product/${productName}`, { state: { productCode } });
   };
+
+  //-------------------------------------------------------------------------------------------------------
+  // Handlers
+  const handleClick = () => {};
 
   const handleDelete = (
     e,

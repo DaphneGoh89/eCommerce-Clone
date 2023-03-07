@@ -16,6 +16,7 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
     loginPassword: "",
   });
 
+  // Close Login component after user has logged in successfully
   useEffect(() => {
     if (status === 200) {
       setShowLogin(false);
@@ -103,6 +104,8 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
               />
             </div>
           </form>
+
+          {/* Status message after login API call */}
           <div
             className={`mt-9 py-3 ${
               status === null

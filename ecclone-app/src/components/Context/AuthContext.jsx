@@ -12,6 +12,7 @@ export default AuthContext;
 // Declare AuthProvider
 export const AuthProvider = ({ children }) => {
   // Get default state from local storage - access token
+  // authToken: {accessToken: xxx, refreshToken: xxx}
   const [authToken, setAuthToken] = useState(
     localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
@@ -22,6 +23,13 @@ export const AuthProvider = ({ children }) => {
       ? jwt_decode(
           JSON.parse(localStorage.getItem("authTokens"))["access_token"]
         )?.firstName
+      : null
+  );
+  const [userLastName, setUserLastName] = useState(
+    localStorage.getItem("authTokens")
+      ? jwt_decode(
+          JSON.parse(localStorage.getItem("authTokens"))["access_token"]
+        )?.lastName
       : null
   );
   const [userId, setUserId] = useState(
@@ -55,6 +63,7 @@ export const AuthProvider = ({ children }) => {
         // Decode access token
         let decodedToken = jwt_decode(data.access_token);
         setUser(decodedToken?.firstName);
+        setUserLastName(decodedToken?.lastName);
         setUserId(decodedToken?.userId);
         localStorage.setItem("authTokens", JSON.stringify(data));
       }
@@ -72,7 +81,8 @@ export const AuthProvider = ({ children }) => {
   let contextData = {
     loginUser: loginUser,
     authToken: authToken,
-    user: user,
+    user: user, // Refers to user's first name
+    userLastName: userLastName,
     userId: userId,
     status: status,
     statusText: statusText,

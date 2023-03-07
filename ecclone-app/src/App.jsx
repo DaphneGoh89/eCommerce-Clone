@@ -41,7 +41,7 @@ function App() {
         let response = await axios.post("http://127.0.0.1:5005/cart/getCart", {
           customerId: customerId,
         });
-        console.log("app refresh", pageRefresh);
+
         if (response.status === 200) {
           let data = response.data;
           setCustomerCart(data);
@@ -76,7 +76,6 @@ function App() {
 
   const handleBgColor = (bgColor) => {
     setPageBgColor(bgColor);
-    console.log("background color", pageBgColor);
   };
 
   //-------------------------------------------------------------------------------------

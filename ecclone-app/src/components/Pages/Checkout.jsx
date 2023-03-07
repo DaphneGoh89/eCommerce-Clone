@@ -10,8 +10,19 @@ import Backdrop from "../Reusables/Backdrop";
 import ConfirmReceiptModal from "../Cart/ConfirmReceiptModal";
 
 const Checkout = () => {
-  const { userId: customerId, user: firstName } = useContext(AuthContext);
-  const { customerCart, cartSubTotal, cartGstAmount } = useContext(DataContext);
+  const {
+    authToken,
+    userId: customerId,
+    user: firstName,
+    userLastName: lastName,
+  } = useContext(AuthContext);
+  const {
+    customerCart,
+    cartSubTotal,
+    cartGstAmount,
+    pageRefresh,
+    setPageRefresh,
+  } = useContext(DataContext);
   const { data, actionResponse, loading, error, fetchData } = useAxios();
   const [submitOrder, setSubmitOrder] = useState(false);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
@@ -20,7 +31,7 @@ const Checkout = () => {
   const checkoutInitState = {
     customerId: customerId, // get from AuthContext
     firstName: firstName,
-    lastName: "",
+    lastName: lastName,
     orderCurrency: "SGD",
     orderTotal: cartSubTotal, // get from DataContext
     giftcard: "",
@@ -35,7 +46,7 @@ const Checkout = () => {
     shiptoCity: "",
     shiptoState: "",
     shiptoPostal: "",
-    contactCtrycode: "",
+    contactCtrycode: "+65",
     contactNumber: "",
     deliveryMethod: "delivery", // set default deliveryMethod
     deliveryTiming: "anytime", // set default deliveryTiming
@@ -74,11 +85,11 @@ const Checkout = () => {
       };
       let requestOptions = {
         method: "PUT",
+        headers: { Authorization: `Bearer ${authToken["access_token"]}` },
         data: { ...orderData },
       };
+      console.log("checkout", requestOptions);
       fetchData(endpoint, requestOptions);
-      console.log("checkout data after create order", data);
-      console.log("Checkout action response", actionResponse);
 
       // Revert back to original state
       setSubmitOrder(false);
@@ -86,9 +97,11 @@ const Checkout = () => {
     }
   }, [submitOrder]);
 
+  // Open Confirm Receipt modal when success response is returned from API call
   useEffect(() => {
     if (actionResponse && actionResponse?.status === "Success") {
       setShowReceiptModal(true);
+      setPageRefresh(!pageRefresh);
     }
   }, [actionResponse]);
 
@@ -135,9 +148,7 @@ const Checkout = () => {
       {showReceiptModal && (
         <>
           <Backdrop />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 z-40 text-center">
-            <ConfirmReceiptModal />
-          </div>
+          <ConfirmReceiptModal actionResponse={actionResponse} />
         </>
       )}
     </div>

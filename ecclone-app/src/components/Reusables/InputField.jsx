@@ -24,7 +24,7 @@ const InputField = ({
         placeholder={placeholder}
         onChange={handleChange}
         disabled={disabled}
-        className="flex-grow text-xs focus: outline-none placeholder:text-xs disabled:bg-[#CBD5E1]/40"
+        className="flex-grow text-xxs focus: outline-none placeholder:text-xxs disabled:bg-[#CBD5E1]/40"
       ></input>
     </div>
   );
