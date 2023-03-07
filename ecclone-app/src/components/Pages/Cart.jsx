@@ -43,12 +43,6 @@ const Cart = () => {
     }
   }, [confirmDelete]);
 
-  //--------------------------------------------------------------------------------------------------------
-  // Calculate Cart Total
-  // const cartSubTotal = customerCart.reduce((subTotal, item) => {
-  //   return subTotal + parseFloat(item.productPrice) * parseFloat(item.quantity);
-  // }, 0);
-
   //-------------------------------------------------------------------------------------------------------
   // Handlers
   const handleClick = () => {};
@@ -97,7 +91,9 @@ const Cart = () => {
         <div className="col-span-2">
           <Link to="/">
             <p className="font-poppins text-xxs text-linkTealGreen underline mb-3 hover:no-underline">
-              Continue shopping
+              {customerCart.length === 0
+                ? "Your shopping bag is currently empty. Start shopping now!"
+                : "Continue shopping"}
             </p>
           </Link>
           <div>
@@ -117,7 +113,11 @@ const Cart = () => {
         <div className={`border-[1px] w-full bg-white py-7 px-6`}>
           <CheckoutSummary />
           {/* --- Checkout Button --- */}
-          <ButtonSubmit btnText="CHECKOUT" handleClick={navigateToCheckout} />
+          <ButtonSubmit
+            btnText="CHECKOUT"
+            handleClick={navigateToCheckout}
+            disabled={customerCart.length === 0}
+          />
         </div>
       </div>
     </div>

@@ -8,7 +8,10 @@ const CheckoutAddrForm = ({
   handleFormSubmission,
 }) => {
   return (
-    <div className="border-[1px] px-6 py-4 mt-4">
+    <form
+      className="border-[1px] px-6 py-4 mt-4"
+      onSubmit={handleFormSubmission}
+    >
       <p className="text-sm mb-4">Shipping Address</p>
       {/* -------------------- Delivery Address ----------------------- */}
 
@@ -78,6 +81,7 @@ const CheckoutAddrForm = ({
             type={"text"}
             labelText={"First Name *"}
             value={checkoutInput.firstName}
+            required={true}
             handleChange={handleInputChange}
           ></FormBaseInput>
 
@@ -87,6 +91,7 @@ const CheckoutAddrForm = ({
             type={"text"}
             labelText={"Last Name *"}
             value={checkoutInput.lastName}
+            required={true}
             handleChange={handleInputChange}
           ></FormBaseInput>
         </div>
@@ -116,10 +121,10 @@ const CheckoutAddrForm = ({
       </div>
 
       <ButtonSubmit
-        btnText={"PROCEED TO PAYMENT"}
-        handleClick={handleFormSubmission}
+        btnText={"CHECKOUT NOW"}
+        // handleClick={handleFormSubmission}
       />
-    </div>
+    </form>
   );
 };
 

@@ -3,7 +3,7 @@ import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 
 const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
-  const [showHomeDel, setShowHomeDel] = useState(null);
+  const [showHomeDel, setShowHomeDel] = useState(true);
   const [showPickUp, setShowPickUp] = useState(null);
 
   return (
@@ -53,6 +53,7 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
                   value="anytime"
                   checked={checkoutInput.deliveryTiming === "anytime"}
                   onChange={handleInputChange}
+                  disabled={checkoutInput.deliveryMethod === "selfCollect"}
                 ></input>
                 <label htmlFor="anytime">Anytime</label>
               </div>
@@ -65,6 +66,7 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
                   value="daytime"
                   checked={checkoutInput.deliveryTiming === "daytime"}
                   onChange={handleInputChange}
+                  disabled={checkoutInput.deliveryMethod === "selfCollect"}
                 ></input>
                 <label htmlFor="dayTime">Daytime (9am - 6pm)</label>
               </div>
@@ -77,6 +79,7 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
                   value="evening"
                   checked={checkoutInput.deliveryTiming === "evening"}
                   onChange={handleInputChange}
+                  disabled={checkoutInput.deliveryMethod === "selfCollect"}
                 ></input>
                 <label htmlFor="evening">Evening (6pm - 10pm)</label>
               </div>
@@ -124,6 +127,7 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
                   value="jem"
                   checked={checkoutInput.pickupStore === "jem"}
                   onChange={handleInputChange}
+                  disabled={checkoutInput.deliveryMethod === "delivery"}
                 ></input>
                 <label htmlFor="jem">JEM</label>
               </div>
@@ -136,6 +140,7 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
                   value="somerset"
                   checked={checkoutInput.pickupStore === "somerset"}
                   onChange={handleInputChange}
+                  disabled={checkoutInput.deliveryMethod === "delivery"}
                 ></input>
                 <label htmlFor="somerset">Somerset</label>
               </div>
@@ -148,6 +153,7 @@ const CheckoutDelvr = ({ checkoutInput, handleInputChange }) => {
                   value="funan"
                   checked={checkoutInput.pickupStore === "funan"}
                   onChange={handleInputChange}
+                  disabled={checkoutInput.deliveryMethod === "delivery"}
                 ></input>
                 <label htmlFor="funan">Funan</label>
               </div>

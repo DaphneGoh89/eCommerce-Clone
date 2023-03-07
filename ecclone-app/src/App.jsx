@@ -15,7 +15,6 @@ import Product from "./components/Pages/Product";
 import Cart from "./components/Pages/Cart";
 import Checkout from "./components/Pages/Checkout";
 import Admin from "./components/Pages/Admin";
-import CustomerProfile from "./components/Pages/CustomerProfile";
 import CustomerMenu from "./components/Pages/CustomerMenu";
 
 // App.jsx
@@ -124,7 +123,6 @@ function App() {
               // Private Routes
               <Route element={<PrivateRoutes />}>
                 <Route path="/admin" element={<Admin />}></Route>
-                <Route path="/profile" element={<CustomerProfile />}></Route>
                 <Route path="/cart" element={<Cart />}></Route>
                 <Route path="/cart/checkout" element={<Checkout />}></Route>
                 <Route path="/customermenu" element={<CustomerMenu />}></Route>

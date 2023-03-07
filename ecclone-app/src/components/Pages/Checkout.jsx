@@ -6,12 +6,15 @@ import Heading1 from "../Reusables/Heading1";
 import CheckoutSummary from "../Cart/CheckoutSummary";
 import CheckoutAddrForm from "../Cart/CheckoutAddrForm";
 import CheckoutDelvr from "../Cart/CheckoutDelvr";
+import Backdrop from "../Reusables/Backdrop";
+import ConfirmReceiptModal from "../Cart/ConfirmReceiptModal";
 
 const Checkout = () => {
   const { userId: customerId, user: firstName } = useContext(AuthContext);
   const { customerCart, cartSubTotal, cartGstAmount } = useContext(DataContext);
   const { data, actionResponse, loading, error, fetchData } = useAxios();
   const [submitOrder, setSubmitOrder] = useState(false);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
 
   // CheckoutInput - initial state object
   const checkoutInitState = {
@@ -34,8 +37,8 @@ const Checkout = () => {
     shiptoPostal: "",
     contactCtrycode: "",
     contactNumber: "",
-    deliveryMethod: "",
-    deliveryTiming: "",
+    deliveryMethod: "delivery", // set default deliveryMethod
+    deliveryTiming: "anytime", // set default deliveryTiming
     pickupStore: "",
     paymentMethod: "",
     paymentAmount: cartSubTotal, // get from DataContext
@@ -43,11 +46,21 @@ const Checkout = () => {
   };
 
   const [checkoutInput, setCheckoutInput] = useState(checkoutInitState);
-  console.log("checkout customer cart", customerCart);
-  console.log("checkout", checkoutInput);
 
   //--------------------------------------------------------------------------------------------
   // useEffect
+
+  // Hide window scroll when modal is open
+  useEffect(() => {
+    if (showReceiptModal) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showReceiptModal]);
+
+  // Call createOrder API when checkout is confirmed
   useEffect(() => {
     if (submitOrder) {
       let endpoint = `/order/createOrder`;
@@ -64,6 +77,7 @@ const Checkout = () => {
         data: { ...orderData },
       };
       fetchData(endpoint, requestOptions);
+      console.log("checkout data after create order", data);
       console.log("Checkout action response", actionResponse);
 
       // Revert back to original state
@@ -72,16 +86,22 @@ const Checkout = () => {
     }
   }, [submitOrder]);
 
+  useEffect(() => {
+    if (actionResponse && actionResponse?.status === "Success") {
+      setShowReceiptModal(true);
+    }
+  }, [actionResponse]);
+
   //---------------------------------------------------------------------------------------------
   // Handlers
   const handleInputChange = (e) => {
     setCheckoutInput((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
-    console.log("Inspect checkoutInput state change", checkoutInput);
   };
 
-  const handleFormSubmission = () => {
+  const handleFormSubmission = (e) => {
+    e.preventDefault();
     setSubmitOrder(true);
   };
 
@@ -111,6 +131,15 @@ const Checkout = () => {
           </div>
         </div>
       </>
+      {/* Confirm Receipt Modal */}
+      {showReceiptModal && (
+        <>
+          <Backdrop />
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 z-40 text-center">
+            <ConfirmReceiptModal />
+          </div>
+        </>
+      )}
     </div>
   );
 };

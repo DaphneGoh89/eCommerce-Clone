@@ -1,17 +1,23 @@
 import React from "react";
 
 const FormBaseInput = ({
+  // Input tag attributes
   id,
   name,
   type,
   value,
+  required,
   placeholder,
   handleChange,
   disabled,
-  divStyle,
   inputStyle,
+
+  // Label tag attribute
   labelText,
   labelStyle,
+
+  // Div attribute
+  divStyle,
 }) => {
   return (
     <div
@@ -29,6 +35,7 @@ const FormBaseInput = ({
         type={type}
         placeholder={placeholder}
         value={value}
+        required={required}
         onChange={handleChange}
         disabled={disabled}
         className="flex-grow w-full text-xs border-[0.5px] border-fontExtraLightGrey py-2 px-4 rounded-sm focus:outline-none focus:border-fontDarkGrey placeholder:text-xs disabled:bg-[#CBD5E1]/40"
