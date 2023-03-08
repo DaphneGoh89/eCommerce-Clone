@@ -4,6 +4,7 @@ import DataContext from "../Context/DataContext";
 import { useAxios } from "../CustomHooks/useAxios";
 import Heading1 from "../Reusables/Heading1";
 import CheckoutSummary from "../Cart/CheckoutSummary";
+import CheckoutProductCart from "../Cart/CheckoutProductCart";
 import CheckoutAddrForm from "../Cart/CheckoutAddrForm";
 import CheckoutDelvr from "../Cart/CheckoutDelvr";
 import Backdrop from "../Reusables/Backdrop";
@@ -24,6 +25,7 @@ const Checkout = () => {
     setPageRefresh,
   } = useContext(DataContext);
   const { data, actionResponse, loading, error, fetchData } = useAxios();
+  const [showCart, setShowCart] = useState(false);
   const [submitOrder, setSubmitOrder] = useState(false);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
 
@@ -85,10 +87,13 @@ const Checkout = () => {
       };
       let requestOptions = {
         method: "PUT",
-        headers: { Authorization: `Bearer ${authToken["access_token"]}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken["access_token"]}`,
+        },
         data: { ...orderData },
       };
-      console.log("checkout", requestOptions);
+      // Execute API calling
       fetchData(endpoint, requestOptions);
 
       // Revert back to original state
@@ -125,8 +130,52 @@ const Checkout = () => {
       <Heading1 text={"Choose Shipping Method"} />
       <>
         <div className="flex flex-col md:flex-row-reverse md:gap-5">
-          {/* -------------------------- Checkout Summary ------------------------------------- */}
-          <div className="basis-1/3 border-[1px] w-full bg-white py-7 px-6">
+          <div className="basis-1/3 border-[1px] w-full bg-white py-5 px-6">
+            <div>
+              {/* -------------------------- My Bag Accordion ------------------------------------- */}
+
+              <div
+                className={`flex flex-row justify-between ${
+                  !showCart ? "border-b-[1px] mb-3" : ""
+                }`}
+              >
+                <p className="text-xs font-semibold tracking-widest pb-3">
+                  My Bag ({customerCart.length})
+                </p>
+                <span
+                  className={`ml-auto h-4 w-4 shrink-0 transition-transform duration-200 ease-in-out motion-reduce:transition-none ${
+                    showCart ? "rotate-180" : ""
+                  }`}
+                  onClick={() => {
+                    setShowCart(!showCart);
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1"
+                    stroke="currentColor"
+                    className="h-4 w-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      stroke="black"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </span>
+              </div>
+              {/* -------------------------- Items in Cart ------------------------------------- */}
+              {showCart &&
+                customerCart.length > 0 &&
+                customerCart.map((item, index) => {
+                  return <CheckoutProductCart key={index} {...item} />;
+                })}
+            </div>
+
+            {/* -------------------------- Checkout Summary ------------------------------------- */}
             <CheckoutSummary />
           </div>
 

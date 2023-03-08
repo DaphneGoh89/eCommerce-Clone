@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }) => {
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null
   );
+
+  // firstName
   const [user, setUser] = useState(
     localStorage.getItem("authTokens")
       ? jwt_decode(
@@ -25,6 +27,8 @@ export const AuthProvider = ({ children }) => {
         )?.firstName
       : null
   );
+
+  // lastName
   const [userLastName, setUserLastName] = useState(
     localStorage.getItem("authTokens")
       ? jwt_decode(
@@ -32,11 +36,22 @@ export const AuthProvider = ({ children }) => {
         )?.lastName
       : null
   );
+
+  // userId
   const [userId, setUserId] = useState(
     localStorage.getItem("authTokens")
       ? jwt_decode(
           JSON.parse(localStorage.getItem("authTokens"))["access_token"]
         )?.userId
+      : null
+  );
+
+  // isAdmin
+  const [isAdmin, setIsAdmin] = useState(
+    localStorage.getItem("authTokens")
+      ? jwt_decode(
+          JSON.parse(localStorage.getItem("authTokens"))["access_token"]
+        )?.isAdmin
       : null
   );
   const [status, setStatus] = useState(null);
@@ -65,6 +80,7 @@ export const AuthProvider = ({ children }) => {
         setUser(decodedToken?.firstName);
         setUserLastName(decodedToken?.lastName);
         setUserId(decodedToken?.userId);
+        setIsAdmin(decodedToken?.isAdmin);
         localStorage.setItem("authTokens", JSON.stringify(data));
       }
       // Set status text for display
@@ -84,6 +100,7 @@ export const AuthProvider = ({ children }) => {
     user: user, // Refers to user's first name
     userLastName: userLastName,
     userId: userId,
+    isAdmin: isAdmin,
     status: status,
     statusText: statusText,
   };

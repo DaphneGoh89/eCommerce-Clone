@@ -13,7 +13,7 @@ const InputField = ({
   labelStyle,
 }) => {
   return (
-    <div className="flex items-center tracking-normal mb-4 pb-1 border-b-2 text-xxs md:text-sm xl:text-base">
+    <div className="flex items-center tracking-normal mb-4 border-b-2 text-xxs md:text-sm xl:text-base">
       <label htmlFor={id} className={labelText == undefined ? "" : "mr-4"}>
         {labelText}
       </label>

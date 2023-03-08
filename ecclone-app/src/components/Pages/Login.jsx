@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Heading1 from "../Reusables/Heading1";
 import InputField from "../Reusables/InputField";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
@@ -9,8 +10,9 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
   //---------------------------------------------------------------------------------------------------
   // States and Context
   //---------------------------------------------------------------------------------------------------
-  let { loginUser, user, authToken, status, statusText } =
+  let { loginUser, user, isAdmin, authToken, status, statusText } =
     useContext(AuthContext);
+
   const [formInput, setFormInput] = useState({
     loginEmail: "",
     loginPassword: "",
@@ -74,38 +76,60 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
             Sign in with another account
           </p>
           {/* ------------------------------------ Login Form ----------------------------------------------- */}
-          <form onSubmit={loginUser}>
-            <div className="mt-9">
-              <InputField
-                id={"loginEmail"}
-                name={"loginEmail"}
-                type={"email"}
-                value={formInput.loginEmail}
-                placeholder={`${!authToken ? "Enter your email here" : ""}`}
-                onChange={handleInputChange}
-                disabled={authToken}
-              />
-              <InputField
-                id={"loginPassword"}
-                name={"loginPassword"}
-                type={"password"}
-                value={formInput.loginPassword}
-                placeholder={`${!authToken ? "Enter password" : ""}`}
-                onChange={handleInputChange}
-                disabled={authToken}
-              />
-            </div>
-            {/* ---------------------- Login Button -------------------------- */}
-            <div className="mt-9">
-              <ButtonSubmit
-                btnText={`${
-                  !authToken ? "LOG IN" : "You've Already Logged In"
-                }`}
-              />
-            </div>
-          </form>
+          {!authToken && (
+            <form onSubmit={loginUser}>
+              <div className="mt-9">
+                <InputField
+                  id={"loginEmail"}
+                  name={"loginEmail"}
+                  type={"email"}
+                  value={formInput.loginEmail}
+                  placeholder={`${!authToken ? "Enter your email here" : ""}`}
+                  onChange={handleInputChange}
+                  disabled={authToken}
+                />
+                <InputField
+                  id={"loginPassword"}
+                  name={"loginPassword"}
+                  type={"password"}
+                  value={formInput.loginPassword}
+                  placeholder={`${!authToken ? "Enter password" : ""}`}
+                  onChange={handleInputChange}
+                  disabled={authToken}
+                />
+              </div>
+              {/* ---------------------- Login Button -------------------------- */}
+              <div className="mt-9">
+                <ButtonSubmit
+                  btnText={`${
+                    !authToken ? "LOG IN" : "You've Already Logged In"
+                  }`}
+                />
+              </div>
+            </form>
+          )}
 
-          {/* Status message after login API call */}
+          {/* --------------------------------- Admin User Menu ---------------------------------------------- */}
+          {authToken && isAdmin === "Y" && (
+            <div className=" mt-10 space-y-4 text-xxs">
+              <p className="link-hover">Dashboard (WIP)</p>
+              <p className="link-hover">Manage Products (WIP)</p>
+              <p className="link-hover">Manage Orders</p>
+            </div>
+          )}
+
+          {/* --------------------------------- Normal User Menu ---------------------------------------------- */}
+          {authToken && isAdmin === "N" && (
+            <div className=" mt-10 space-y-4 text-xxs">
+              <p className="link-hover">Manage My Order</p>
+              <p className="link-hover">Manage Return</p>
+              <p className="link-hover">View My Carts</p>
+              <p className="link-hover">View My Favorites</p>
+            </div>
+          )}
+
+          {/* --------------------------- Status message after login API call -------------------------------- */}
+
           <div
             className={`mt-9 py-3 ${
               status === null

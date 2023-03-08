@@ -30,7 +30,6 @@ export const useAxios = (endpoint, requestOption) => {
         setData(response.data);
       } else {
         setActionResponse(response.data);
-        console.log("action response", actionResponse);
       }
     } catch (error) {
       setError(error);

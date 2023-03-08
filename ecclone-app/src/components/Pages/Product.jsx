@@ -39,7 +39,7 @@ const Product = () => {
     productSize: cartProductSize,
     quantity: cartQuantity,
   } = location.state;
-  console.log("Product Page", location.state);
+  // console.log("Product Page", location.state);
   const { user, userId: customerId } = useContext(AuthContext);
   const { pageRefresh, setPageRefresh } = useContext(DataContext);
 
@@ -338,6 +338,7 @@ const Product = () => {
                   handleClick={
                     formState === "edit" ? handleEditCart : handleAddToCart
                   }
+                  disabled={optionState.onHand === 0}
                 />
                 <button className="border-[1px] border-fontExtraLightGrey rounded px-3">
                   <MdOutlineFavoriteBorder />

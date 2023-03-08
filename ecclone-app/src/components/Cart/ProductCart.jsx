@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 
 function getImageUrl(name) {
   return new URL(`../../assets/images/${name}.webp`, import.meta.url).href;
@@ -19,6 +19,12 @@ const ProductCart = ({
   mainDisplay,
   handleDelete,
 }) => {
+  //------------------------------------------------------------------------
+  // useLocation
+  const location = useLocation();
+  let checkoutPage = location.pathname.includes("checkout");
+  // console.log("location", location.pathname.includes("checkout"));  --> returns true if user is at checkout page
+
   //------------------------------------------------------------------------
   // useNavigate
   const navigate = useNavigate();
@@ -85,13 +91,15 @@ const ProductCart = ({
               <p className="mb-2 md:py-1.5">S${productPrice}</p>
 
               {/* ------------------------------------------ Quantity Selection ------------------------------------------- */}
+
               <select
                 id="quantity"
                 name="quantity"
                 data-te-select-init
                 value={quantity}
+                disabled
                 onChange={handleQuantityChange}
-                className="border-[1px] border-fontExtraLightGrey/50 bg-transparent w-14 sm:h-fit py-0.5 rounded-sm text-center focus:outline-none"
+                className="border-[1px] border-fontExtraLightGrey/50 disabled:bg-[#CBD5E1]/40 bg-transparent w-14 sm:h-fit py-0.5 rounded-sm text-center focus:outline-none"
               >
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -114,7 +122,8 @@ const ProductCart = ({
         </div>
       </div>
 
-      {/* ------------------------------------------ Update Cart ------------------------------------------- */}
+      {/* ------------------------------------------ Edit / Remove Cart ------------------------------------------- */}
+
       <div className="text-xxxs flex flex-row justify-end space-x-3 my-2">
         <p
           className="cursor-pointer"
