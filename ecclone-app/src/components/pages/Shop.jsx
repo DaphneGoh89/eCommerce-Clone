@@ -33,7 +33,9 @@ const Shop = () => {
   const navigate = useNavigate();
 
   const navigateToProduct = (productName, productCode) => {
-    navigate(`/product/${productName}`, { state: { productCode } });
+    navigate(`/product/${productName}`, {
+      state: { productCode, formState: "new" },
+    });
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -66,7 +68,7 @@ const Shop = () => {
           </div>
           <Pagination
             currentPage={currentPage}
-            totalCount={dummyProduct.length}
+            totalCount={data.length} //{dummyProduct.length}
             pageSize={pageSize}
             onPageChange={(page) => setCurrentPage(page)}
           />

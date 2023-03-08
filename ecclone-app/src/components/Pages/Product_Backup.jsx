@@ -32,24 +32,14 @@ const Product = () => {
   const { data, actionResponse, loading, error, fetchData } = useAxios();
   const param = useParams();
   const location = useLocation();
-  const {
-    formState,
-    productCode,
-    hexColor: cartHexColor,
-    productSize: cartProductSize,
-    quantity: cartQuantity,
-  } = location.state;
-  console.log("Product Page", location.state);
+  const { productCode } = location.state;
   const { user, userId: customerId } = useContext(AuthContext);
   const { pageRefresh, setPageRefresh } = useContext(DataContext);
 
   const [quantityByColor, setQuantityByColor] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
   const [addToCart, setAddToCart] = useState(false);
-  const [editCart, setEditCart] = useState(false);
-  const [selectedQty, setSelectedQty] = useState(
-    formState === "edit" ? cartQuantity : 1
-  );
+  const [selectedQty, setSelectedQty] = useState(1);
 
   //--------------------------------------------------------------------------------------------------------
   // Reducer fx - For updating 'optionState' when a new option is selected
@@ -124,10 +114,8 @@ const Product = () => {
       // Select the first color option on page load
       dispatchOptionState({
         payload: {
-          hexColor:
-            formState === "edit" ? cartHexColor : data?.stockOnHand[0].hexColor,
-          size:
-            formState === "edit" ? cartProductSize : data?.stockOnHand[0].size,
+          hexColor: data?.stockOnHand[0].hexColor,
+          size: data?.stockOnHand[0].size,
         },
       });
 
@@ -166,7 +154,6 @@ const Product = () => {
 
   //-------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
-    // Call addToCart API if formState is "new"
     if (addToCart) {
       let endpoint = `/cart/add`;
       let cartData = {
@@ -181,39 +168,12 @@ const Product = () => {
         method: "PUT",
         data: { ...cartData },
       };
-      // Execute fetch addToCart endpoint
       fetchData(endpoint, requestOptions);
-      console.log("Product AddToCart Action Response", actionResponse);
-      // Refresh cart and reinstate state
+      console.log("product", actionResponse);
       setPageRefresh(!pageRefresh);
       setAddToCart(false);
     }
-    // Call editCart API if formState is "edit"
-    else if (editCart) {
-      let editEndpoint = `/cart/edit`;
-      let editCartData = {
-        customerId: customerId,
-        productCode: productCode,
-        productName: data?.productName,
-        oldProductColor: cartHexColor,
-        oldProductSize: cartProductSize,
-        oldQuantity: cartQuantity,
-        newProductColor: optionState.hexColor,
-        newProductSize: optionState.size,
-        newQuantity: selectedQty,
-      };
-      let requestOptions = {
-        method: "PUT",
-        data: { ...editCartData },
-      };
-      // Execute fetch editCart endpoint
-      fetchData(editEndpoint, requestOptions);
-      console.log("Product EditCart Action Response", actionResponse);
-      // Refresh cart and reinstate state
-      setPageRefresh(!pageRefresh);
-      setEditCart(false);
-    }
-  }, [addToCart, editCart]);
+  }, [addToCart]);
 
   //-------------------------------------------------------------------------------------------------------------------
   // Handlers
@@ -223,10 +183,6 @@ const Product = () => {
 
   const handleAddToCart = () => {
     setAddToCart(true);
-  };
-
-  const handleEditCart = () => {
-    setEditCart(true);
   };
 
   //-------------------------------------------------------------------------------------------------------------------
@@ -334,10 +290,8 @@ const Product = () => {
               {/* Add to cart / mailing list button */}
               <div className="flex flex-row space-x-2">
                 <ButtonSubmit
-                  btnText={formState === "edit" ? "EDIT BAG" : "ADD TO BAG"}
-                  handleClick={
-                    formState === "edit" ? handleEditCart : handleAddToCart
-                  }
+                  btnText="ADD TO BAG"
+                  handleClick={handleAddToCart}
                 />
                 <button className="border-[1px] border-fontExtraLightGrey rounded px-3">
                   <MdOutlineFavoriteBorder />

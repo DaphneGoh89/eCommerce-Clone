@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 
 function getImageUrl(name) {
   return new URL(`../../assets/images/${name}.webp`, import.meta.url).href;
@@ -9,6 +10,7 @@ const ProductCart = ({
   productName,
   productColor,
   colorName,
+  hexColor,
   productSize,
   currency,
   productPrice,
@@ -17,6 +19,30 @@ const ProductCart = ({
   mainDisplay,
   handleDelete,
 }) => {
+  //------------------------------------------------------------------------
+  // useNavigate
+  const navigate = useNavigate();
+
+  const navigateToProduct = (
+    productName,
+    productCode,
+    colorName,
+    hexColor,
+    productSize,
+    quantity
+  ) => {
+    navigate(`/product/${productName}`, {
+      state: {
+        productCode,
+        colorName,
+        hexColor,
+        productSize,
+        quantity,
+        formState: "edit",
+      },
+    });
+  };
+
   //------------------------------------------------------------------------
   // Handler
   const handleQuantityChange = () => {};
@@ -52,7 +78,7 @@ const ProductCart = ({
             <div className="capitalize md:flex-grow sm:w-full">
               <p>{productName}</p>
               <p className="mb-2">
-                {colorName} / {productSize}
+                {colorName} / <span className="uppercase">{productSize}</span>
               </p>
             </div>
             <div className="md:flex md:flex-row md:space-x-3">
@@ -90,7 +116,21 @@ const ProductCart = ({
 
       {/* ------------------------------------------ Update Cart ------------------------------------------- */}
       <div className="text-xxxs flex flex-row justify-end space-x-3 my-2">
-        <p>Edit</p>
+        <p
+          className="cursor-pointer"
+          onClick={() =>
+            navigateToProduct(
+              productName,
+              productCode,
+              colorName, // optional
+              hexColor,
+              productSize,
+              quantity
+            )
+          }
+        >
+          Edit
+        </p>
         <p
           className="cursor-pointer"
           onClick={(e) =>

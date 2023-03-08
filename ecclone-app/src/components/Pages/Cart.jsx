@@ -117,15 +117,17 @@ const Cart = () => {
                 );
               })}
           </div>
-          <div className={`bg-alertWarningBg py-2`}>
-            <p className={`flex flex-row items-center text-red-700`}>
-              <span className="mx-2 text-xs">
-                <RiErrorWarningLine />
-              </span>
-              Please remove all out of stock items from cart before proceed to
-              checkout.
-            </p>
-          </div>
+          {zeroOnHand.length !== 0 && (
+            <div className={`bg-alertWarningBg py-2`}>
+              <p className={`flex flex-row items-center text-red-700`}>
+                <span className="mx-2 text-xs">
+                  <RiErrorWarningLine />
+                </span>
+                Please remove all out of stock items from cart before proceed to
+                checkout.
+              </p>
+            </div>
+          )}
         </div>
         {/* ------------------------------------- Order Summary ----------------------------------------------- */}
         <div className={`border-[1px] w-full bg-white py-7 px-6`}>
