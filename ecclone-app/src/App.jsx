@@ -1,5 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import PrivateRoutes from "./components/Utils/PrivateRoutes";
 import AuthContext from "./components/Context/AuthContext";
 import DataContext from "./components/Context/DataContext";
@@ -9,12 +15,14 @@ import NavBar from "./components/Common/NavBar";
 import Footer from "./components/Common/Footer";
 import Login from "./components/Pages/Login";
 import SignUp from "./components/Pages/SignUp";
+import LoginWSignup from "./components/Pages/LoginWSignup";
 import Home from "./components/Pages/Home";
 import Shop from "./components/Pages/Shop";
 import Product from "./components/Pages/Product";
 import Cart from "./components/Pages/Cart";
 import Checkout from "./components/Pages/Checkout";
 import CustomerMenu from "./components/Pages/CustomerMenu";
+import ManageOrders from "./components/Pages/AdminPages/ManageOrders";
 
 // App.jsx
 function App() {
@@ -28,8 +36,10 @@ function App() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [openShopMenu, setOpenShopMenu] = useState(false);
   const [pageBgColor, setPageBgColor] = useState("white");
+  const location = useLocation();
+  let currentPath = location.pathname;
+  console.log("App", location);
   let gstPercent = 8;
-  console.log("App", customerId);
 
   //-------------------------------------------------------------------------------------
   // useEffect - automatically fetched from customer cart based on access token available in localStorage
@@ -52,8 +62,9 @@ function App() {
         console.log("Error", error.message);
       }
     };
-
-    getCustomerCart(customerId);
+    if (customerId) {
+      getCustomerCart(customerId);
+    }
   }, [customerId, pageRefresh]);
 
   //--------------------------------------------------------------------------------------------------------
@@ -90,7 +101,15 @@ function App() {
         cartGstAmount: cartGstAmount,
       }}
     >
-      <div className={`flex flex-col h-screen bg-${pageBgColor}`}>
+      <div
+        className={`flex flex-col h-screen bg-${
+          currentPath.includes("login")
+            ? "bgLightPink"
+            : currentPath.includes("checkout")
+            ? "bgLightGreen"
+            : pageBgColor
+        }`}
+      >
         <div className="flex-grow">
           <NavBar
             showLogin={showLogin}
@@ -116,6 +135,7 @@ function App() {
               // Public Routes
               <Route path="/home" element={<Home />}></Route>
               <Route path="/" element={<Shop />}></Route>
+              <Route path="/login" element={<LoginWSignup />}></Route>
               <Route path="/product/:productName" element={<Product />}></Route>
               //---------------------------------------------------------------------
               // Private Routes
@@ -123,6 +143,10 @@ function App() {
                 <Route path="/cart" element={<Cart />}></Route>
                 <Route path="/cart/checkout" element={<Checkout />}></Route>
                 <Route path="/customermenu" element={<CustomerMenu />}></Route>
+                <Route
+                  path="/admin/manageorder"
+                  element={<ManageOrders />}
+                ></Route>
               </Route>
             </Routes>
           </div>

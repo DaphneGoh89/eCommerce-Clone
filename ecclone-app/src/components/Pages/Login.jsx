@@ -10,8 +10,15 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
   //---------------------------------------------------------------------------------------------------
   // States and Context
   //---------------------------------------------------------------------------------------------------
-  let { loginUser, user, isAdmin, authToken, status, statusText } =
-    useContext(AuthContext);
+  let {
+    loginUser,
+    user,
+    isAdmin,
+    authToken,
+    status,
+    statusText,
+    setStatusText,
+  } = useContext(AuthContext);
 
   const [formInput, setFormInput] = useState({
     loginEmail: "",
@@ -22,6 +29,8 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
   useEffect(() => {
     if (status === 200) {
       setShowLogin(false);
+      setStatusText("");
+      setStatusText(null);
     }
   }, [status]);
 
@@ -111,10 +120,12 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
 
           {/* --------------------------------- Admin User Menu ---------------------------------------------- */}
           {authToken && isAdmin === "Y" && (
-            <div className=" mt-10 space-y-4 text-xxs">
+            <div className=" mt-10 text-xxs">
               <p className="link-hover">Dashboard (WIP)</p>
               <p className="link-hover">Manage Products (WIP)</p>
-              <p className="link-hover">Manage Orders</p>
+              <Link to="/admin/manageorder">
+                <p className="link-hover">Manage Orders</p>
+              </Link>
             </div>
           )}
 

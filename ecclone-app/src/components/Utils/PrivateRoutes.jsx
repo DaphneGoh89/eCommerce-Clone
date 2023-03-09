@@ -5,7 +5,7 @@ import AuthContext from "../Context/AuthContext";
 const PrivateRoutes = () => {
   // Rest operator takes in the path, element parameter from the parent
 
-  console.log("Private routes here!");
+  // console.log("Private routes here!");
 
   let { authToken } = useContext(AuthContext);
 

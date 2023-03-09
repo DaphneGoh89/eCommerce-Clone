@@ -11,6 +11,6 @@ body {
 
 @layer components {
   .link-hover {
-    @apply cursor-pointer border-b-[1px] border-transparent hover:font-bold hover:underline hover:underline-offset-4 hover:decoration-bgFooterPink;
+    @apply cursor-pointer mb-5 border-b-[1px] border-transparent hover:font-bold hover:underline hover:underline-offset-4 hover:decoration-bgFooterPink;
   }
 }

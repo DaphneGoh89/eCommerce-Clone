@@ -24,6 +24,7 @@ module.exports = {
         bgLightPink: "#F9F0EC",
         bgPink: "#FFCE58",
         bgFooterPink: "#FFCEBC",
+        bgLightGreen: "#F6F6F6",
         fontMenuPink: "#E78C78",
         fontHeaderBlack: "39383A",
         fontDarkGrey: "#283737",

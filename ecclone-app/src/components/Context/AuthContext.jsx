@@ -54,6 +54,8 @@ export const AuthProvider = ({ children }) => {
         )?.isAdmin
       : null
   );
+
+  // Response status and status message for display upon login
   const [status, setStatus] = useState(null);
   const [statusText, setStatusText] = useState(null);
 
@@ -102,7 +104,9 @@ export const AuthProvider = ({ children }) => {
     userId: userId,
     isAdmin: isAdmin,
     status: status,
+    setStatus: setStatus,
     statusText: statusText,
+    setStatusText: setStatusText,
   };
 
   return (

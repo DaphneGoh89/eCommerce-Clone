@@ -100,6 +100,9 @@ const Product = () => {
     imgArray: [],
   });
 
+  console.log("Product option state", optionState);
+  console.log("Product size", productSizes);
+
   //--------------------------------------------------------------------------------------------------------
   // useEffect
   // - [] : fetch product information from server on page loading
@@ -306,7 +309,7 @@ const Product = () => {
               {/* Quantity selection */}
               <div
                 className={`text-xxs mb-4 ${
-                  optionState.onHand === 0 ? "hidden" : ""
+                  optionState.onHand <= 0 ? "hidden" : ""
                 }`}
               >
                 <label htmlFor="quantity" className="mr-4">
@@ -338,7 +341,7 @@ const Product = () => {
                   handleClick={
                     formState === "edit" ? handleEditCart : handleAddToCart
                   }
-                  disabled={optionState.onHand === 0}
+                  disabled={optionState.onHand <= 0}
                 />
                 <button className="border-[1px] border-fontExtraLightGrey rounded px-3">
                   <MdOutlineFavoriteBorder />

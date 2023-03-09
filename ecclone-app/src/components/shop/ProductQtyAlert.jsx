@@ -6,14 +6,14 @@ const ProductQtyAlert = ({ quantity }) => {
     <div className={`text-xxxs ${quantity === undefined ? "hidden" : ""}`}>
       <p
         className={`w-fit rounded-sm px-2 py-1 mb-3 ${
-          quantity === 0
+          quantity <= 0
             ? "bg-alertOOSBg text-alertOOSFont"
             : quantity <= 10
             ? "bg-alertWarningBg text-alertWarningFont"
             : "bg-alertInfoBg text-alertInfoFont"
         }`}
       >
-        {quantity === 0
+        {quantity <= 0
           ? "OUT OF STOCK"
           : quantity <= 10
           ? "LAST FEW PIECES"
