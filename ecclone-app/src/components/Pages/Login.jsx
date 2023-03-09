@@ -29,8 +29,8 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
   useEffect(() => {
     if (status === 200) {
       setShowLogin(false);
-      setStatusText("");
-      setStatusText(null);
+      //setStatusText("");
+      //setStatusText(null);
     }
   }, [status]);
 

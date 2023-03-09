@@ -1,11 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import PrivateRoutes from "./components/Utils/PrivateRoutes";
 import AuthContext from "./components/Context/AuthContext";
 import DataContext from "./components/Context/DataContext";
@@ -21,7 +15,6 @@ import Shop from "./components/Pages/Shop";
 import Product from "./components/Pages/Product";
 import Cart from "./components/Pages/Cart";
 import Checkout from "./components/Pages/Checkout";
-import CustomerMenu from "./components/Pages/CustomerMenu";
 import ManageOrders from "./components/Pages/AdminPages/ManageOrders";
 
 // App.jsx
@@ -29,8 +22,12 @@ function App() {
   //-------------------------------------------------------------------------------------
   // States
   //-------------------------------------------------------------------------------------
-  const { userId: customerId } = useContext(AuthContext);
-  const [customerCart, setCustomerCart] = useState([]);
+  const { userId: customerId, authToken } = useContext(AuthContext);
+  const [customerCart, setCustomerCart] = useState(
+    localStorage.getItem("lbCart")
+      ? JSON.parse(localStorage.getItem("lbCart"))
+      : []
+  );
   const [pageRefresh, setPageRefresh] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
@@ -38,15 +35,32 @@ function App() {
   const [pageBgColor, setPageBgColor] = useState("white");
   const location = useLocation();
   let currentPath = location.pathname;
-  console.log("App", location);
   let gstPercent = 8;
 
   //-------------------------------------------------------------------------------------
   // useEffect - automatically fetched from customer cart based on access token available in localStorage
   //-------------------------------------------------------------------------------------
   useEffect(() => {
+    // Get customer cart upon login
     let getCustomerCart = async (customerId) => {
       try {
+        // Transfer from localStorage to customer cart upon login
+        if (localStorage.getItem("lbCart")) {
+          let transferStorageResponse = await axios.put(
+            "http://127.0.0.1:5005/cart/addMultiple",
+            {
+              customerId: customerId,
+              cartItems: customerCart,
+            },
+            { Authorization: `Bearer ${authToken["access_token"]}` }
+          );
+
+          if (transferStorageResponse.status === 200) {
+            localStorage.removeItem("lbCart");
+          }
+        }
+
+        // Get customer cart upon login
         let response = await axios.post("http://127.0.0.1:5005/cart/getCart", {
           customerId: customerId,
         });
@@ -54,7 +68,6 @@ function App() {
         if (response.status === 200) {
           let data = response.data;
           setCustomerCart(data);
-          console.log("customer cart", customerCart);
         } else {
           alert(response.statusText);
         }
@@ -92,11 +105,14 @@ function App() {
   // Render
   //-------------------------------------------------------------------------------------
   return (
+    //---------------------------------------------------------------------
+    // Data Context
     <DataContext.Provider
       value={{
         pageRefresh: pageRefresh,
         setPageRefresh: setPageRefresh,
         customerCart: customerCart,
+        setCustomerCart: setCustomerCart,
         cartSubTotal: cartSubTotal,
         cartGstAmount: cartGstAmount,
       }}
@@ -107,6 +123,8 @@ function App() {
             ? "bgLightPink"
             : currentPath.includes("checkout")
             ? "bgLightGreen"
+            : currentPath.includes("admin")
+            ? "[#E7E5E4]"
             : pageBgColor
         }`}
       >
@@ -128,21 +146,24 @@ function App() {
           <SignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp} />
 
           <div
-            className={`container max-w-[320px] sm:max-w-[640px] lg:max-w-[960px] mx-auto `}
+            className={`${
+              currentPath.includes("admin")
+                ? ""
+                : "container max-w-[320px] sm:max-w-[640px] lg:max-w-[960px] mx-auto "
+            }`}
           >
             <Routes>
               //---------------------------------------------------------------------
               // Public Routes
-              <Route path="/home" element={<Home />}></Route>
-              <Route path="/" element={<Shop />}></Route>
+              <Route path="/home" element={<Home />}></Route> // WIP
               <Route path="/login" element={<LoginWSignup />}></Route>
+              <Route path="/" element={<Shop />}></Route>
               <Route path="/product/:productName" element={<Product />}></Route>
               //---------------------------------------------------------------------
               // Private Routes
               <Route element={<PrivateRoutes />}>
                 <Route path="/cart" element={<Cart />}></Route>
                 <Route path="/cart/checkout" element={<Checkout />}></Route>
-                <Route path="/customermenu" element={<CustomerMenu />}></Route>
                 <Route
                   path="/admin/manageorder"
                   element={<ManageOrders />}

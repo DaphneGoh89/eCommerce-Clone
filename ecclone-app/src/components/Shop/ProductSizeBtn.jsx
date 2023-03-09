@@ -6,7 +6,6 @@ const ProductSizeBtn = ({
   sizeSelected,
   dispatchOptionState,
 }) => {
-  console.log("Product size button", size, quantity, sizeSelected);
   const handleClick = (size) => {
     dispatchOptionState({ payload: { size: size } });
   };

@@ -17,7 +17,7 @@ const ConfirmReceiptModal = ({ actionResponse }) => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 z-40 text-center">
+    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-1/4 z-40 text-center">
       <div className=" bg-white px-5 py-5 rounded-lg items-center text-xs text-black">
         {/* ----------------------- Close Login Form Button - navigate to <Shop /> onClick ------------------------ */}
         <div className="float-right pb-3">

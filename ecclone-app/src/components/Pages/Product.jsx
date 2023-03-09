@@ -40,9 +40,13 @@ const Product = () => {
     quantity: cartQuantity,
   } = location.state;
   // console.log("Product Page", location.state);
-  const { user, userId: customerId } = useContext(AuthContext);
-  const { pageRefresh, setPageRefresh } = useContext(DataContext);
 
+  // Context
+  const { user, userId: customerId } = useContext(AuthContext);
+  const { pageRefresh, setPageRefresh, setCustomerCart } =
+    useContext(DataContext);
+
+  // States
   const [quantityByColor, setQuantityByColor] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
   const [addToCart, setAddToCart] = useState(false);
@@ -100,14 +104,11 @@ const Product = () => {
     imgArray: [],
   });
 
-  console.log("Product option state", optionState);
-  console.log("Product size", productSizes);
-
   //--------------------------------------------------------------------------------------------------------
   // useEffect
   // - [] : fetch product information from server on page loading
   // - [data] : Process data after fetch
-  // - [addToCart] : call 'cart/add' endpoint when user click on 'Add To Bag' button
+  // - [addToCart/ editCart] : call 'cart/add' endpoint when user click on 'Add To Bag' button
   //--------------------------------------------------------------------------------------------------------
   useEffect(() => {
     let endpoint = `/product/${param.productName}`;
@@ -169,8 +170,39 @@ const Product = () => {
 
   //-------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
-    // Call addToCart API if formState is "new"
-    if (addToCart) {
+    // Scenario 1: Customer adds to cart without login -> keep in localStorage
+    if (addToCart && customerId === null) {
+      if (localStorage.getItem("lbCart")) {
+        let localCart = JSON.parse(localStorage.getItem("lbCart"));
+        localCart.push({
+          productCode: productCode,
+          productName: data?.productName,
+          productColor: optionState.hexColor,
+          productSize: optionState.size,
+          quantity: selectedQty,
+        });
+        localStorage.setItem("lbCart", JSON.stringify(localCart));
+        setCustomerCart(JSON.parse(localStorage.getItem("lbCart")));
+        setAddToCart(false);
+      } else {
+        localStorage.setItem(
+          "lbCart",
+          JSON.stringify([
+            {
+              productCode: productCode,
+              productName: data?.productName,
+              productColor: optionState.hexColor,
+              productSize: optionState.size,
+              quantity: selectedQty,
+            },
+          ])
+        );
+        setCustomerCart(JSON.parse(localStorage.getItem("lbCart")));
+        setAddToCart(false);
+      }
+    }
+    // Scenario 2: Customer adds to cart after login -> directly save to database
+    else if (addToCart && customerId !== null) {
       let endpoint = `/cart/add`;
       let cartData = {
         customerId: customerId,
@@ -186,12 +218,12 @@ const Product = () => {
       };
       // Execute fetch addToCart endpoint
       fetchData(endpoint, requestOptions);
-      console.log("Product AddToCart Action Response", actionResponse);
+
       // Refresh cart and reinstate state
       setPageRefresh(!pageRefresh);
       setAddToCart(false);
     }
-    // Call editCart API if formState is "edit"
+    // Scenario 3: Customer edits cart item through product page -> call editCart API
     else if (editCart) {
       let editEndpoint = `/cart/edit`;
       let editCartData = {
@@ -211,7 +243,7 @@ const Product = () => {
       };
       // Execute fetch editCart endpoint
       fetchData(editEndpoint, requestOptions);
-      console.log("Product EditCart Action Response", actionResponse);
+
       // Refresh cart and reinstate state
       setPageRefresh(!pageRefresh);
       setEditCart(false);
@@ -239,15 +271,15 @@ const Product = () => {
       {!loading && Object.keys(data).length > 0 && (
         <>
           <BreadCrumbs />
-          <div className="grid grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
             {/* Product images */}
-            <div className="col-span-2 grid grid-cols-2 gap-3">
+            <div className=" sm:col-span-2 sm:grid grid-cols-2 sm:gap-3">
               {optionState.imgArray.length > 0 &&
                 optionState.imgArray.map((image, index) => {
                   return (
                     <div key={index}>
                       <img
-                        className="w-full aspect-auto"
+                        className="w-full aspect-auto mb-4 sm:mb-0"
                         src={getImageUrl(image)}
                       ></img>
                     </div>

@@ -22,13 +22,11 @@ const Cart = () => {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [itemToDelete, setItemToDelete] = useState({});
 
-  console.log("Customer Cart Page", customerCart);
   //--------------------------------------------------------------------------------------------------------
   // Filter customerCart - get all items with zero onHandQty
   let zeroOnHand = customerCart.filter(
     (item, index) => parseInt(item.onHandQty) <= 0
   );
-  console.log("Customer Cart Page - zeroOnHand", zeroOnHand);
 
   //--------------------------------------------------------------------------------------------------------
   // useEffect - remove item from cart

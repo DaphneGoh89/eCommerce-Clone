@@ -15,7 +15,7 @@ const ProductColor = ({
       <div
         role="button"
         className={`w-2.5 h-2.5 rounded-full border-[1px] border-fontExtraLightGrey cursor-pointer ${
-          quantity === 0
+          quantity <= 0
             ? "cursor-not-allowed opacity-60 after:block after:absolute after:top-1/2 after:left-1/2 after:rotate-45 after:origin-center after:-translate-x-1/2 after:-translate-y-1/2 after:border-[0.5px] after:h-2.5 after:bg-white"
             : ""
         } ${
@@ -24,7 +24,7 @@ const ProductColor = ({
             : ""
         }`}
         style={{ background: `${hexColor}` }}
-        disabled={quantity === 0}
+        disabled={quantity <= 0}
       ></div>
     </div>
   );
