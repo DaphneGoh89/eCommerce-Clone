@@ -78,6 +78,7 @@ function App() {
     if (customerId) {
       getCustomerCart(customerId);
     }
+    console.log("App - Page Refresh", pageRefresh);
   }, [customerId, pageRefresh]);
 
   //--------------------------------------------------------------------------------------------------------
