@@ -18,7 +18,7 @@ This project aims to clone an existing e-commerce site (Love Bonito Singapore) t
 
 ### Shopping Page
 
-![shopping page](./ecclone-app/src/assets/readme_images/Shopping_Page.png)
+![shopping page](./ecclone-app/src/assets/readme_images/Shopping_Page.png)![mobile shopping page](./ecclone-app//src/assets/readme_images/Mobile_Shopping_Page.png)
 
 ### Product Page
 
