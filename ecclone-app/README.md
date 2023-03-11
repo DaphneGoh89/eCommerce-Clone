@@ -1,0 +1,5 @@
+# E-COMMERCE CLONE
+
+## TECHNOLOGIES USED
+
+1. React
