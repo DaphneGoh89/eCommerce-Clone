@@ -27,3 +27,5 @@ This project aims to clone an existing e-commerce site (Love Bonito Singapore) t
 ## Look of the Site - Mobile View
 
 ![website mobile view](./ecclone-app//src/assets/readme_images/Website_Mobile_View.png)
+
+## User Stories
