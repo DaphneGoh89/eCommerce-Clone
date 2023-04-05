@@ -13,6 +13,7 @@ import LoginWSignup from "./components/Pages/LoginWSignup";
 import Home from "./components/Pages/Home";
 import Shop from "./components/Pages/Shop";
 import Product from "./components/Pages/Product";
+import Favorites from "./components/Pages/Favorites";
 import Cart from "./components/Pages/Cart";
 import Checkout from "./components/Pages/Checkout";
 import ManageOrders from "./components/Pages/AdminPages/ManageOrders";
@@ -163,6 +164,7 @@ function App() {
               //---------------------------------------------------------------------
               // Private Routes
               <Route element={<PrivateRoutes />}>
+                <Route path="/favorites" element={<Favorites />}></Route>
                 <Route path="/cart" element={<Cart />}></Route>
                 <Route path="/cart/checkout" element={<Checkout />}></Route>
                 <Route

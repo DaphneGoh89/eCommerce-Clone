@@ -121,10 +121,16 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
           {/* --------------------------------- Admin User Menu ---------------------------------------------- */}
           {authToken && isAdmin === "Y" && (
             <div className=" mt-10 text-xxs">
-              <p className="link-hover">Dashboard (WIP)</p>
-              <p className="link-hover">Manage Products (WIP)</p>
+              <p className="link-spacing link-underline-animation">
+                Dashboard (WIP)
+              </p>
+              <p className="link-spacing link-underline-animation">
+                Manage Products (WIP)
+              </p>
               <Link to="/admin/manageorder">
-                <p className="link-hover">Manage Orders</p>
+                <p className="link-spacing link-underline-animation">
+                  Manage Orders
+                </p>
               </Link>
             </div>
           )}
@@ -132,10 +138,18 @@ const Login = ({ showLogin, setShowLogin, setShowSignUp }) => {
           {/* --------------------------------- Normal User Menu ---------------------------------------------- */}
           {authToken && isAdmin === "N" && (
             <div className=" mt-10 space-y-4 text-xxs">
-              <p className="link-hover">Manage My Order</p>
-              <p className="link-hover">Manage Return</p>
-              <p className="link-hover">View My Carts</p>
-              <p className="link-hover">View My Favorites</p>
+              <p className="link-spacing link-underline-animation">
+                Manage My Order
+              </p>
+              <p className="link-spacing link-underline-animation">
+                Manage Return
+              </p>
+              <p className="link-spacing link-underline-animation">
+                View My Carts
+              </p>
+              <p className="link-spacing link-underline-animation">
+                View My Favorites
+              </p>
             </div>
           )}
 

@@ -10,7 +10,16 @@ body {
 }
 
 @layer components {
-  .link-hover {
-    @apply cursor-pointer mb-5 border-b-[1px] border-transparent hover:font-bold hover:underline hover:underline-offset-4 hover:decoration-bgFooterPink;
+  .active-navbar {
+    @apply fixed top-0 w-full transition-all duration-300 ease-in z-40;
+  }
+
+  .link-spacing {
+    @apply cursor-pointer w-fit mx-auto mb-5 border-b-[1px] border-transparent;
+  }
+
+  /* Underline on-hover animation : center -> both sides */
+  .link-underline-animation {
+    @apply relative after:absolute after:w-full after:h-0.5 after:left-0 after:-bottom-0.5 after:scale-x-0 after:origin-center after:bg-bgPink after:transition-transform after:duration-150 after:ease-out hover:after:scale-x-100 hover:after:origin-center;
   }
 }

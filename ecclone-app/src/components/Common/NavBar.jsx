@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import { AiOutlineUser, AiOutlineShopping } from "react-icons/ai";
+import { MdOutlineFavoriteBorder } from "react-icons/md";
 import ShopMenu from "./ShopMenu";
 import AuthContext from "../Context/AuthContext";
 
@@ -13,16 +14,50 @@ const NavBar = ({
   handleBgColor,
   customerCart,
 }) => {
+  const [show, setShow] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const controlNavbar = () => {
+    if (typeof window !== undefined) {
+      // Scroll down
+      if (window.scrollY > lastScrollY) {
+        console.log("scroll down", show);
+        setShow(false);
+      } else {
+        // Scroll up
+        console.log("scroll up", show);
+        setShow(true);
+      }
+      // Set current position as last position
+      setLastScrollY(window.scrollY);
+    }
+  };
+
+  // useEffect for scroll event to show and hide navbar
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      window.addEventListener("scroll", controlNavbar);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrollY]);
+
   //-------------------------------------------------------------------------------------------------------------------
   // Render
   return (
-    <nav className="relative flex justify-between bg-bgLightPink border-b-[1px] text-xs">
+    <nav
+      className={`flex justify-between bg-bgLightPink border-b-[0px] text-xs active-navbar ${
+        !show && "-top-40"
+      }`}
+    >
       {/* ----------------------------------------- NAV - Home / Shop ----------------------------------------------- */}
       <div className="hidden w-full md:block md:w-auto">
         <div className="flex flex-row items-center space-x-4 px-10 py-5 cursor-pointer">
           {/* ---------- Home menu ---------- */}
           <Link to="/">
-            <button>HOME</button>
+            <button className="link-underline-animation">HOME</button>
           </Link>
           {/* ------------ Shop menu ------------ */}
           <div
@@ -33,7 +68,7 @@ const NavBar = ({
             <Link to="/">
               <button
                 onClick={() => setOpenShopMenu(true)}
-                className="hover:border-b-2 hover:border-bgPink"
+                className="link-underline-animation"
               >
                 SHOP
               </button>
@@ -91,6 +126,12 @@ const NavBar = ({
       {/* --------------------------------------------------- NAV - Login / Cart -----------------------------------------------*/}
       <div>
         <div className="flex flex-row items-start space-x-4 px-8 py-3 cursor-pointer text-xl font-extralight">
+          {/* --------------- Customer's Favorites --------------------- */}
+          <Link to="/favorites">
+            <button className={`p-1 rounded-full hover:bg-bgPink `}>
+              <MdOutlineFavoriteBorder />
+            </button>
+          </Link>
           {/* --------------- User login --------------------- */}
           <button
             className={`p-1 rounded-full hover:bg-bgPink ${
