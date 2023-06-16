@@ -1,5 +1,5 @@
 import React from "react";
-import { submenu } from "./dummyData";
+import { submenu } from "../Footer/dummyData";
 import ShopSubMenu from "./ShopSubMenu";
 
 const ShopMenu = () => {

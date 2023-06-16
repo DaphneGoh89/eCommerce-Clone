@@ -5,18 +5,7 @@ import AuthContext from "./components/Context/AuthContext";
 import DataContext from "./components/Context/DataContext";
 import axios from "axios";
 // Import Components
-import NavBar from "./components/Common/NavBar";
-import Footer from "./components/Common/Footer";
-import Login from "./components/Pages/Login";
-import SignUp from "./components/Pages/SignUp";
-import LoginWSignup from "./components/Pages/LoginWSignup";
-import Home from "./components/Pages/Home";
-import Shop from "./components/Pages/Shop";
-import Product from "./components/Pages/Product";
-import Favorites from "./components/Pages/Favorites";
-import Cart from "./components/Pages/Cart";
-import Checkout from "./components/Pages/Checkout";
-import ManageOrders from "./components/Pages/AdminPages/ManageOrders";
+import AppRoutes from "./components/Routes/AppRoutes";
 
 // App.jsx
 function App() {
@@ -30,9 +19,6 @@ function App() {
       : []
   );
   const [pageRefresh, setPageRefresh] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [openShopMenu, setOpenShopMenu] = useState(false);
   const [pageBgColor, setPageBgColor] = useState("white");
   const location = useLocation();
   let currentPath = location.pathname;
@@ -119,65 +105,7 @@ function App() {
         cartGstAmount: cartGstAmount,
       }}
     >
-      <div
-        className={`flex flex-col h-screen bg-${
-          currentPath.includes("login")
-            ? "bgLightPink"
-            : currentPath.includes("checkout")
-            ? "bgLightGreen"
-            : currentPath.includes("admin")
-            ? "[#E7E5E4]"
-            : pageBgColor
-        }`}
-      >
-        <div className="flex-grow">
-          <NavBar
-            showLogin={showLogin}
-            handleLoginDisplay={handleLoginDisplay}
-            openShopMenu={openShopMenu}
-            setOpenShopMenu={setOpenShopMenu}
-            handleBgColor={handleBgColor}
-            customerCart={customerCart}
-          />
-
-          <Login
-            showLogin={showLogin}
-            setShowLogin={setShowLogin}
-            setShowSignUp={setShowSignUp}
-          />
-          <SignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp} />
-
-          <div
-            className={`${
-              currentPath.includes("admin")
-                ? ""
-                : "container max-w-[320px] sm:max-w-[640px] lg:max-w-[960px] mx-auto "
-            }`}
-          >
-            <Routes>
-              //---------------------------------------------------------------------
-              // Public Routes
-              <Route path="/home" element={<Home />}></Route> // WIP
-              <Route path="/login" element={<LoginWSignup />}></Route>
-              <Route path="/" element={<Shop />}></Route>
-              <Route path="/product/:productName" element={<Product />}></Route>
-              //---------------------------------------------------------------------
-              // Private Routes
-              <Route element={<PrivateRoutes />}>
-                <Route path="/favorites" element={<Favorites />}></Route>
-                <Route path="/cart" element={<Cart />}></Route>
-                <Route path="/cart/checkout" element={<Checkout />}></Route>
-                <Route
-                  path="/admin/manageorder"
-                  element={<ManageOrders />}
-                ></Route>
-              </Route>
-            </Routes>
-          </div>
-        </div>
-
-        <Footer />
-      </div>
+      <AppRoutes></AppRoutes>
     </DataContext.Provider>
   );
 }

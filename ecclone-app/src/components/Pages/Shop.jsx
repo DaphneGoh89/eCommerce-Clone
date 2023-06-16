@@ -9,7 +9,7 @@ const Shop = () => {
   //-----------------------------------------------------------------------------------------------
   // States
   //-----------------------------------------------------------------------------------------------
-  let pageSize = 12;
+  let pageSize = 20;
   const [currentPage, setCurrentPage] = useState(1);
   const { data, loading, error, fetchData } = useAxios();
 

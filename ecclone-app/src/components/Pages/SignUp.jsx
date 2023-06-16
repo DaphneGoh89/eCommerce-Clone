@@ -5,7 +5,7 @@ import InputField from "../Reusables/InputField";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { RxCross1 } from "react-icons/rx";
 
-const SignUp = ({ showSignUp, setShowSignUp }) => {
+const SignUp = ({ setShowSignUp }) => {
   //----------------------------------------------------------------------------------------
   // States & Hooks
   const { data, actionResponse, loading, error, fetchData } = useAxios();
@@ -64,78 +64,72 @@ const SignUp = ({ showSignUp, setShowSignUp }) => {
   // Render
   return (
     <>
-      <div
-        className={`w-10/12 md:w-5/12 xl:w-3/12 px-10 py-10 h-full fixed right-0 bg-bgWhite border-l-[1px] duration-1000 ease-in-out z-40 ${
-          showSignUp ? "translate-x-0" : "translate-x-full"
-        }`}
+      {/* Close signup form */}
+      <div className="float-right pb-10">
+        <RxCross1
+          className="cursor-pointer"
+          onClick={() => setShowSignUp(false)}
+        />
+      </div>
+      {/* Form - Header */}
+      <form
+        className="clear-both flex flex-col justify-center items-left text-center"
+        onSubmit={handleFormSubmission}
       >
-        {/* Close signup form */}
-        <div className="float-right pb-10">
-          <RxCross1
-            className="cursor-pointer"
-            onClick={() => setShowSignUp(false)}
+        <Heading1 text={"Create An Account"} />
+        {/* Form - Body */}
+        <div className="mt-9 grid grid-cols-2 space-x-2 w-full justify-between">
+          <InputField
+            id={"userFirstName"}
+            name={"userFirstName"}
+            type={"text"}
+            value={signupInput.userFirstName}
+            placeholder={"First Name*"}
+            handleChange={handleChange}
+          />
+          <InputField
+            id={"userLastName"}
+            name={"userLastName"}
+            type={"text"}
+            value={signupInput.userLastName}
+            placeholder={"Last Name*"}
+            handleChange={handleChange}
           />
         </div>
-        {/* Form - Header */}
-        <form
-          className="clear-both flex flex-col justify-center items-left text-center"
-          onSubmit={handleFormSubmission}
-        >
-          <Heading1 text={"Create An Account"} />
-          {/* Form - Body */}
-          <div className="mt-9 flex flex-row space-x-2 w-full justify-between">
-            <InputField
-              id={"userFirstName"}
-              name={"userFirstName"}
-              type={"text"}
-              value={signupInput.userFirstName}
-              placeholder={"First Name*"}
-              handleChange={handleChange}
-            />
-            <InputField
-              id={"userLastName"}
-              name={"userLastName"}
-              type={"text"}
-              value={signupInput.userLastName}
-              placeholder={"Last Name*"}
-              handleChange={handleChange}
-            />
-          </div>
-          <div>
-            <InputField
-              id={"userEmail"}
-              name={"userEmail"}
-              type={"email"}
-              value={signupInput.userEmail}
-              placeholder={"Email Address*"}
-              handleChange={handleChange}
-            />
-            <InputField
-              id={"userPassword"}
-              name={"userPassword"}
-              type={"password"}
-              value={signupInput.userPassword}
-              placeholder={"Password*"}
-              handleChange={handleChange}
-            />
-          </div>
-          {/* Submit Form Button */}
-          <div className="mt-9">
-            <ButtonSubmit btnText={"CREATE ACCOUNT"} />
-          </div>
-        </form>
-        {/* Status message after login API call */}
-        <div
-          className={`mt-9 py-3 px-2 text-xxs ${
-            actionResponse?.status === undefined
-              ? "hidden"
-              : actionResponse?.status === "Success"
-              ? "bg-alertInfoBg text-alertInfoFont"
-              : "bg-alertPinkInfoBg text-alertWarningFont"
-          } `}
-        >
-          {actionResponse?.message}
+        <div className="col-span-2">
+          <InputField
+            id={"userEmail"}
+            name={"userEmail"}
+            type={"email"}
+            value={signupInput.userEmail}
+            placeholder={"Email Address*"}
+            handleChange={handleChange}
+          />
+          <InputField
+            id={"userPassword"}
+            name={"userPassword"}
+            type={"password"}
+            value={signupInput.userPassword}
+            placeholder={"Password*"}
+            handleChange={handleChange}
+          />
         </div>
+        {/* Submit Form Button */}
+        <div className="mt-9">
+          <ButtonSubmit btnText={"CREATE ACCOUNT"} />
+        </div>
+      </form>
+      {/* Status message after login API call */}
+      <div
+        className={`mt-9 py-3 px-2 text-xxs ${
+          actionResponse?.status === undefined
+            ? "hidden"
+            : actionResponse?.status === "Success"
+            ? "bg-alertInfoBg text-alertInfoFont"
+            : "bg-alertPinkInfoBg text-alertWarningFont"
+        } `}
+      >
+        {actionResponse?.message}
       </div>
     </>
   );

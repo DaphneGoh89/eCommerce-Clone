@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 body {
-  @apply font-poppins;
+  @apply font-poppins pt-10;
 }
 
 @layer components {
@@ -21,5 +21,13 @@ body {
   /* Underline on-hover animation : center -> both sides */
   .link-underline-animation {
     @apply relative after:absolute after:w-full after:h-0.5 after:left-0 after:-bottom-0.5 after:scale-x-0 after:origin-center after:bg-bgPink after:transition-transform after:duration-150 after:ease-out hover:after:scale-x-100 hover:after:origin-center;
+  }
+
+  .navbar-icon-highlight {
+    @apply p-1 rounded-full hover:bg-bgPink;
+  }
+
+  .right-modal {
+    @apply w-10/12 md:w-5/12 xl:w-3/12 px-10 py-10 h-full fixed right-0 bg-bgWhite border-l-[1px] duration-1000 ease-in-out z-40;
   }
 }
