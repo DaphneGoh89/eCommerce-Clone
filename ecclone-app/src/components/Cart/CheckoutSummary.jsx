@@ -1,12 +1,21 @@
-import React, { useState, useContext } from "react";
-import DataContext from "../Context/DataContext";
+import React, { useState, useEffect } from "react";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
+import { useSelector } from "react-redux";
+import { getCartTotal } from "../ReduxStore/CartReducer";
 
 const CheckoutSummary = () => {
-  const { cartSubTotal, cartGstAmount } = useContext(DataContext);
+  const { cart } = useSelector((state) => state.cart);
+  const [total, setTotal] = useState(0);
+  const [gstAmount, setGstAmount] = useState(0);
   const [showGst, setShowGst] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
   const [showGiftCard, setShowGiftCard] = useState(false);
+
+  useEffect(() => {
+    const { cartTotal, cartGstAmount } = getCartTotal(cart);
+    setTotal(() => cartTotal);
+    setGstAmount(() => cartGstAmount);
+  }, [cart]);
 
   //-----------------------------------------------------------------------------------------------
   // Render
@@ -18,7 +27,7 @@ const CheckoutSummary = () => {
       {/* --- Subtotal --- */}
       <div className="flex flex-row justify-between mb-1.5">
         <p>Subtotal</p>
-        <p>S$ {(Math.round(cartSubTotal * 100) / 100).toFixed(2)}</p>
+        <p>S$ {(Math.round(total * 100) / 100).toFixed(2)}</p>
       </div>
       {/* --- Shipping --- */}
       <div className="flex flex-row justify-between mb-1.5">
@@ -60,7 +69,7 @@ const CheckoutSummary = () => {
         }`}
       >
         <p>GST (8%) (Included)</p>
-        <p>S$ {(Math.round(cartGstAmount * 100) / 100).toFixed(2)}</p>
+        <p>S$ {(Math.round(gstAmount * 100) / 100).toFixed(2)}</p>
       </div>
       {/* --- Promo Code Accordion --- */}
       <div className="flex flex-row justify-between mb-1.5 border-t-[1px] pt-1.5">
@@ -115,8 +124,8 @@ const CheckoutSummary = () => {
         <div className="flex flex-row justify-between items-center space-x-20 mb-1 pt-1.5">
           <input
             type="text"
-            id="promoCode"
-            name="promoCode"
+            id="giftCode"
+            name="giftCode"
             className="flex-grow text-xxxs p-2 border-[1px] border-fontDarkGrey rounded-sm"
             placeholder="Enter gift code here"
           ></input>
@@ -131,7 +140,7 @@ const CheckoutSummary = () => {
       {/* --- Calculate Order Total --- */}
       <div className="text-xs font-bold mb-7 pt-1.5 border-t-[1px] border-fontDarkGrey flex flex-row justify-between">
         <p>Total</p>
-        <p>S$ {(Math.round(cartSubTotal * 100) / 100).toFixed(2)}</p>
+        <p>S$ {(Math.round(total * 100) / 100).toFixed(2)}</p>
       </div>
     </div>
   );

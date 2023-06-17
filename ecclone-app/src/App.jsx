@@ -2,8 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import AuthContext from "./components/Context/AuthContext";
 import DataContext from "./components/Context/DataContext";
-import { useDispatch, useSelector } from "react-redux";
-
 import axios from "axios";
 // Import Components
 import AppRoutes from "./components/Routes/AppRoutes";
@@ -13,8 +11,7 @@ function App() {
   //-------------------------------------------------------------------------------------
   // States
   //-------------------------------------------------------------------------------------
-  const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state.cart);
+
   const { userId: customerId, authToken } = useContext(AuthContext);
 
   // useEffect(() => {

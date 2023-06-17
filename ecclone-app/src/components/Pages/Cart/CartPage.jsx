@@ -1,54 +1,26 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../Context/AuthContext";
-import DataContext from "../Context/DataContext";
-import { useAxios } from "../CustomHooks/useAxios";
-import ProductCart from "../Cart/ProductCart";
-import CheckoutSummary from "../Cart/CheckoutSummary";
-import ButtonSubmit from "../Reusables/ButtonSubmit";
+import AuthContext from "../../Context/AuthContext";
+import DataContext from "../../Context/DataContext";
+import { useAxios } from "../../CustomHooks/useAxios";
+import CartItem from "./CartItem";
+import CheckoutSummary from "../../Cart/CheckoutSummary";
+import ButtonSubmit from "../../Reusables/ButtonSubmit";
 import { RiErrorWarningLine } from "react-icons/ri";
+import { useSelector } from "react-redux";
 
-const Cart = () => {
-  const {
-    customerCart,
-    cartSubTotal,
-    cartGstAmount,
-    pageRefresh,
-    setPageRefresh,
-  } = useContext(DataContext);
+const CartPage = () => {
+  const { customerCart } = useContext(DataContext);
   const { userId: customerId } = useContext(AuthContext);
+  const { cart } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const { data, actionResponse, loading, error, fetchData } = useAxios();
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState({});
 
   //--------------------------------------------------------------------------------------------------------
   // Filter customerCart - get all items with zero onHandQty
   let zeroOnHand = customerCart.filter(
     (item, index) => parseInt(item.onHandQty) <= 0
   );
-
-  //--------------------------------------------------------------------------------------------------------
-  // useEffect - remove item from cart
-  useEffect(() => {
-    if (confirmDelete) {
-      let endpoint = `/cart/delete`;
-      let cartData = {
-        customerId: customerId,
-        ...itemToDelete,
-      };
-      let requestOptions = {
-        method: "DELETE",
-        data: { ...cartData },
-      };
-      console.log("cart delete", requestOptions);
-      fetchData(endpoint, requestOptions);
-
-      setPageRefresh(!pageRefresh);
-      setConfirmDelete(false);
-      setItemToDelete({});
-    }
-  }, [confirmDelete]);
 
   //-----------------------------------------------------------------------------------------------
   // useNavigate
@@ -64,33 +36,13 @@ const Cart = () => {
   // Handlers
   const handleClick = () => {};
 
-  const handleDelete = (
-    e,
-    productCode,
-    productName,
-    productColor,
-    productSize
-  ) => {
-    setItemToDelete((prevState) => {
-      return {
-        ...prevState,
-        productCode: productCode,
-        productName: productName,
-        productColor: productColor,
-        productSize: productSize,
-      };
-    });
-    setConfirmDelete(true);
-    //console.log("In delete handler", itemToDelete);
-  };
-
   //-------------------------------------------------------------------------------------------------------
   // Render
   return (
     <div className="">
       {/* ------------------------------------- Cart Header ---------------------------------------------- */}
       <div className="font-playfair font-bold text-xl tracking-wide py-4">
-        My Shopping Bag ({customerCart.length})
+        My Shopping Bag ({cart.length})
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5 font-poppins text-xxs">
@@ -98,20 +50,16 @@ const Cart = () => {
         <div className="col-span-2">
           <Link to="/">
             <p className=" text-linkTealGreen underline mb-3 hover:no-underline">
-              {customerCart.length === 0
+              {cart.length === 0
                 ? "Your shopping bag is currently empty. Start shopping now!"
                 : "Continue shopping"}
             </p>
           </Link>
           <div>
-            {customerCart.length > 0 &&
-              customerCart.map((item, index) => {
+            {cart.length > 0 &&
+              cart.map((item, index) => {
                 return (
-                  <ProductCart
-                    key={index}
-                    {...item}
-                    handleDelete={handleDelete}
-                  />
+                  <CartItem key={index} {...item} customerId={customerId} />
                 );
               })}
           </div>
@@ -134,7 +82,7 @@ const Cart = () => {
           <ButtonSubmit
             btnText="CHECKOUT"
             handleClick={navigateToCheckout}
-            disabled={customerCart.length === 0 || zeroOnHand.length !== 0}
+            disabled={cart.length === 0 || zeroOnHand.length !== 0}
           />
         </div>
       </div>
@@ -142,4 +90,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default CartPage;

@@ -1,11 +1,16 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router";
+import {
+  getCartAsync,
+  removeFromCartAsync,
+} from "../../ReduxStore/CartReducer";
 
 function getImageUrl(name) {
-  return new URL(`../../assets/images/${name}.webp`, import.meta.url).href;
+  return new URL(`../../../assets/images/${name}.webp`, import.meta.url).href;
 }
 
-const ProductCart = ({
+const CartItem = ({
   productCode,
   productName,
   productColor,
@@ -17,18 +22,14 @@ const ProductCart = ({
   quantity,
   onHandQty,
   mainDisplay,
-  handleDelete,
+  customerId,
 }) => {
-  //------------------------------------------------------------------------
-  // useLocation
+  const dispatch = useDispatch();
   const location = useLocation();
-  let checkoutPage = location.pathname.includes("checkout");
-  // console.log("location", location.pathname.includes("checkout"));  --> returns true if user is at checkout page
-
-  //------------------------------------------------------------------------
-  // useNavigate
   const navigate = useNavigate();
+  let checkoutPage = location.pathname.includes("checkout");
 
+  // onEdit: navigate to product page
   const navigateToProduct = (
     productName,
     productCode,
@@ -47,6 +48,25 @@ const ProductCart = ({
         formState: "edit",
       },
     });
+  };
+
+  // remove item from cart
+  const handleDelete = (
+    e,
+    productCode,
+    productName,
+    productColor,
+    productSize
+  ) => {
+    dispatch(
+      removeFromCartAsync({
+        customerId,
+        productCode,
+        productName,
+        productColor,
+        productSize,
+      })
+    ).then(() => dispatch(getCartAsync(customerId)));
   };
 
   //------------------------------------------------------------------------
@@ -153,4 +173,4 @@ const ProductCart = ({
   );
 };
 
-export default ProductCart;
+export default CartItem;

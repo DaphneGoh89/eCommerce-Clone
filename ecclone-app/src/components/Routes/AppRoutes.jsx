@@ -6,7 +6,7 @@ import Shop from "../Pages/Shop";
 import Product from "../Pages/Product";
 import PrivateRoutes from "../Utils/PrivateRoutes";
 import Favorites from "../Pages/Favorites";
-import Cart from "../Pages/Cart";
+import CartPage from "../Pages/Cart/CartPage";
 import Checkout from "../Pages/Checkout";
 import ManageOrders from "../Pages/AdminPages/ManageOrders";
 import MainLayoutRoute from "./MainLayoutRoute";
@@ -28,7 +28,7 @@ const AppRoutes = () => {
         <Route element={<PrivateRoutes />}>
           <Route element={<MainLayoutRoute />}>
             <Route path="/favorites" element={<Favorites />}></Route>
-            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/cart" element={<CartPage />}></Route>
           </Route>
           <Route path="/cart/checkout" element={<Checkout />}></Route>
           <Route path="/admin/manageorder" element={<ManageOrders />}></Route>

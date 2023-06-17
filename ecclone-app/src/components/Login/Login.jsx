@@ -1,4 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  getCartAsync,
+  postMultipleToCartAsync,
+} from "../ReduxStore/CartReducer";
 import { Link } from "react-router-dom";
 import Heading1 from "../Reusables/Heading1";
 import InputField from "../Reusables/InputField";
@@ -13,12 +18,14 @@ const Login = ({ setShowLogin, setShowSignUp }) => {
   let {
     loginUser,
     user,
+    userId,
     isAdmin,
     authToken,
     status,
     statusText,
     setStatusText,
   } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const [formInput, setFormInput] = useState({
     loginEmail: "",
@@ -31,6 +38,18 @@ const Login = ({ setShowLogin, setShowSignUp }) => {
       setShowLogin(false);
       //setStatusText("");
       //setStatusText(null);
+
+      if (localStorage.getItem("lbCart")) {
+        let cartItems = JSON.parse(localStorage.getItem("lbCart"));
+        let cartData = { customerId: userId, cartItems: cartItems };
+        let header = { Authorization: `Bearer ${authToken["access_token"]}` };
+        dispatch(postMultipleToCartAsync({ cartData, header })).then(() => {
+          localStorage.removeItem("lbCart");
+          dispatch(getCartAsync(userId));
+        });
+      } else {
+        dispatch(getCartAsync(userId));
+      }
     }
   }, [status]);
 

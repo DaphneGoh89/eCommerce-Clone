@@ -10,7 +10,12 @@ import ProductQtyAlert from "../Shop/ProductQtyAlert";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getCartAsync, postToCartAsync } from "../ReduxStore/CartReducer";
+import {
+  getCartAsync,
+  postToLocalStorageCart,
+  postToCartAsync,
+  putToCartAsync,
+} from "../ReduxStore/CartReducer";
 
 //--------------------------------------------------------------------------------------------------------
 // Function required for displaying images saved in Assets folder
@@ -177,38 +182,19 @@ const Product = () => {
   useEffect(() => {
     // Scenario 1: Customer adds to cart without login -> keep in localStorage
     if (addToCart && customerId === null) {
-      if (localStorage.getItem("lbCart")) {
-        let localCart = JSON.parse(localStorage.getItem("lbCart"));
-        localCart.push({
-          productCode: productCode,
-          productName: data?.productName,
-          productColor: optionState.hexColor,
-          productSize: optionState.size,
-          quantity: selectedQty,
-        });
-        localStorage.setItem("lbCart", JSON.stringify(localCart));
-        setCustomerCart(JSON.parse(localStorage.getItem("lbCart")));
-        setAddToCart(false);
-      } else {
-        localStorage.setItem(
-          "lbCart",
-          JSON.stringify([
-            {
-              productCode: productCode,
-              productName: data?.productName,
-              productColor: optionState.hexColor,
-              productSize: optionState.size,
-              quantity: selectedQty,
-            },
-          ])
-        );
-        setCustomerCart(JSON.parse(localStorage.getItem("lbCart")));
-        setAddToCart(false);
-      }
+      let product = {
+        productCode: productCode,
+        productName: data?.productName,
+        productColor: optionState.hexColor,
+        productSize: optionState.size,
+        quantity: selectedQty,
+      };
+
+      dispatch(postToLocalStorageCart(product));
+      setAddToCart(false);
     }
     // Scenario 2: Customer adds to cart after login -> directly save to database
     else if (addToCart && customerId !== null) {
-      let endpoint = `/cart/add`;
       let cartData = {
         customerId: customerId,
         productCode: productCode,
@@ -218,20 +204,11 @@ const Product = () => {
         quantity: selectedQty,
       };
 
-      dispatch(postToCartAsync(cartData))
-        .then(() => dispatch(getCartAsync(customerId)))
-        .then(() => console.log("post to cart and cart refresh done!"));
-
-      console.log("product component - cart: ", cart);
-      // let requestOptions = {
-      //   method: "PUT",
-      //   data: { ...cartData },
-      // };
-      // Execute fetch addToCart endpoint
-      // fetchData(endpoint, requestOptions);
+      dispatch(postToCartAsync(cartData)).then(() =>
+        dispatch(getCartAsync(customerId))
+      );
 
       // Refresh cart and reinstate state
-      setPageRefresh(!pageRefresh);
       setAddToCart(false);
     }
     // Scenario 3: Customer edits cart item through product page -> call editCart API
@@ -248,15 +225,12 @@ const Product = () => {
         newProductSize: optionState.size,
         newQuantity: selectedQty,
       };
-      let requestOptions = {
-        method: "PUT",
-        data: { ...editCartData },
-      };
-      // Execute fetch editCart endpoint
-      fetchData(editEndpoint, requestOptions);
+
+      dispatch(putToCartAsync(editCartData)).then(() =>
+        dispatch(getCartAsync(customerId))
+      );
 
       // Refresh cart and reinstate state
-      setPageRefresh(!pageRefresh);
       setEditCart(false);
     }
   }, [addToCart, editCart]);

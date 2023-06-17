@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import Login from "../Pages/Login";
-import SignUp from "../Pages/SignUp";
+import Login from "../Login/Login";
+import SignUp from "../SignUp/SignUp";
 import { Outlet, useLocation } from "react-router";
 
 const MainLayoutRoute = () => {
