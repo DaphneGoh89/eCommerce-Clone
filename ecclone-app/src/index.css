@@ -27,6 +27,10 @@ body {
     @apply p-1 rounded-full hover:bg-bgPink;
   }
 
+  .left-modal {
+    @apply w-full h-screen bg-bgWhite absolute left-0 top-0 mb-5 duration-1000 ease-in-out border-b-[1px] border-r-[1px] z-10;
+  }
+
   .right-modal {
     @apply w-10/12 md:w-5/12 xl:w-3/12 px-10 py-10 h-full fixed right-0 bg-bgWhite border-l-[1px] duration-1000 ease-in-out z-40;
   }

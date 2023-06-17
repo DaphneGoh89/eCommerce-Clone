@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCartAsync } from "../ReduxStore/CartReducer";
+import AuthContext from "../Context/AuthContext";
 import HamburgerMenu from "./HamburgerMenu";
 import ShopMenu from "../Common/ShopMenu";
 import { AiOutlineUser, AiOutlineShopping } from "react-icons/ai";
@@ -11,26 +14,31 @@ const Header = ({
   openShopMenu,
   setOpenShopMenu,
   handleBgColor,
-  customerCart,
 }) => {
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
+  const { userId: customerId, authToken } = useContext(AuthContext);
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Get customer cart
+  useEffect(() => {
+    if (customerId) dispatch(getCartAsync(customerId));
+  }, []);
+
+  // NavBar onScroll animation
   const controlNavbar = () => {
     if (typeof window !== undefined) {
-      // Scroll down
       if (window.scrollY > lastScrollY) {
-        setShow(false);
+        setShow(false); // scroll down
       } else {
-        // Scroll up
-        setShow(true);
+        setShow(true); // scroll up
       }
-      // Set current position as last position
-      setLastScrollY(window.scrollY);
+
+      setLastScrollY(window.scrollY); // set current position as last position
     }
   };
 
-  // useEffect for scroll event to show and hide navbar
   useEffect(() => {
     if (typeof window !== undefined) {
       window.addEventListener("scroll", controlNavbar);
@@ -41,6 +49,7 @@ const Header = ({
     };
   }, [lastScrollY]);
 
+  // Return
   return (
     <header>
       <nav
@@ -81,7 +90,10 @@ const Header = ({
           </div>
         </div>
         {/* ------------------------------------ NAV - HAMBURGER (MOBILE VIEW) ----------------------------------------------- */}
-        <HamburgerMenu openShopMenu={openShopMenu}></HamburgerMenu>
+        <HamburgerMenu
+          openShopMenu={openShopMenu}
+          setOpenShopMenu={setOpenShopMenu}
+        ></HamburgerMenu>
         {/* --------------------------------------------------- NAV - Login / Cart -----------------------------------------------*/}
         <div>
           <div className="flex flex-row items-start space-x-4 px-8 py-3 cursor-pointer text-xl font-extralight">
@@ -103,10 +115,10 @@ const Header = ({
               <AiOutlineShopping />
               <div
                 className={`text-xxxs text-center leading-4 block absolute top-0 -right-1 w-4 h-4 rounded-full bg-bgFooterPink ${
-                  customerCart?.length > 0 ? "block" : "hidden"
+                  cart?.length > 0 ? "block" : "hidden"
                 }`}
               >
-                {customerCart?.length}
+                {cart?.length}
               </div>
             </Link>
           </div>

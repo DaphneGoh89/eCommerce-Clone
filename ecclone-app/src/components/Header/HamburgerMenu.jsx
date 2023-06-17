@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import ShopMenu from "../Common/ShopMenu";
 
-const HamburgerMenu = ({ openShopMenu }) => {
+const HamburgerMenu = ({ openShopMenu, setOpenShopMenu }) => {
   return (
     <div className="group">
       <button className="block md:hidden py-4 px-8">
@@ -14,29 +14,27 @@ const HamburgerMenu = ({ openShopMenu }) => {
 
         {/* ---------- Side Menu Animation ---------- */}
         <div
-          className={`flex flex-col w-full h-screen bg-bgWhite absolute left-0 top-0 mb-5  duration-1000 ease-in-out border-b-[1px] border-r-[1px] z-10 ${
+          className={`flex flex-col px-8 left-modal ${
             openShopMenu ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* ----- Logo header with close modal button ----- */}
-          <div className="flex flex-row justify-between items-center py-5 px-8 border-b-[1px]">
-            <Link to="/">
-              <div
-                className="font-playfair text-fontHeaderBlack text-left text-xl font-bold"
-                onClick={() => setOpenShopMenu(!openShopMenu)}
-              >
-                Love Bonito
-              </div>
+          <div className="flex flex-row justify-between items-center py-5 border-b-[1px]">
+            <Link
+              to="/"
+              className="font-playfair text-fontHeaderBlack text-left text-xl font-bold"
+              onClick={() => setOpenShopMenu(!openShopMenu)}
+            >
+              Love Bonito
             </Link>
-            <div>
-              <RxCross1
-                className="cursor-pointer text-lg"
-                onClick={() => setOpenShopMenu(false)}
-              />
-            </div>
+
+            <RxCross1
+              className="cursor-pointer text-lg"
+              onClick={() => setOpenShopMenu(false)}
+            />
           </div>
           {/* -------- Side Menu -------- */}
-          <div className="py-5 px-8 bg-white">
+          <div className="py-5">
             <ShopMenu />
           </div>
         </div>

@@ -9,6 +9,8 @@ import ProductSizeBtn from "../Shop/ProductSizeBtn";
 import ProductQtyAlert from "../Shop/ProductQtyAlert";
 import ButtonSubmit from "../Reusables/ButtonSubmit";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { getCartAsync, postToCartAsync } from "../ReduxStore/CartReducer";
 
 //--------------------------------------------------------------------------------------------------------
 // Function required for displaying images saved in Assets folder
@@ -26,6 +28,9 @@ function isObject(value) {
 
 //--------------------------------------------------------------------------------------------------------
 const Product = () => {
+  const dispatch = useDispatch();
+  const { cart, status } = useSelector((state) => state.cart);
+
   //------------------------------------------------------------------------------------------------------
   // States & Hooks
   //------------------------------------------------------------------------------------------------------
@@ -212,12 +217,18 @@ const Product = () => {
         productSize: optionState.size,
         quantity: selectedQty,
       };
-      let requestOptions = {
-        method: "PUT",
-        data: { ...cartData },
-      };
+
+      dispatch(postToCartAsync(cartData))
+        .then(() => dispatch(getCartAsync(customerId)))
+        .then(() => console.log("post to cart and cart refresh done!"));
+
+      console.log("product component - cart: ", cart);
+      // let requestOptions = {
+      //   method: "PUT",
+      //   data: { ...cartData },
+      // };
       // Execute fetch addToCart endpoint
-      fetchData(endpoint, requestOptions);
+      // fetchData(endpoint, requestOptions);
 
       // Refresh cart and reinstate state
       setPageRefresh(!pageRefresh);

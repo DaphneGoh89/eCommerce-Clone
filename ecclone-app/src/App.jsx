@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import PrivateRoutes from "./components/Utils/PrivateRoutes";
 import AuthContext from "./components/Context/AuthContext";
 import DataContext from "./components/Context/DataContext";
+import { useDispatch, useSelector } from "react-redux";
+
 import axios from "axios";
 // Import Components
 import AppRoutes from "./components/Routes/AppRoutes";
@@ -12,7 +13,14 @@ function App() {
   //-------------------------------------------------------------------------------------
   // States
   //-------------------------------------------------------------------------------------
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
   const { userId: customerId, authToken } = useContext(AuthContext);
+
+  // useEffect(() => {
+  //   dispatch(getCartAsync(customerId));
+  // }, []);
+
   const [customerCart, setCustomerCart] = useState(
     localStorage.getItem("lbCart")
       ? JSON.parse(localStorage.getItem("lbCart"))
@@ -27,46 +35,46 @@ function App() {
   //-------------------------------------------------------------------------------------
   // useEffect - automatically fetched from customer cart based on access token available in localStorage
   //-------------------------------------------------------------------------------------
-  useEffect(() => {
-    // Get customer cart upon login
-    let getCustomerCart = async (customerId) => {
-      try {
-        // Transfer from localStorage to customer cart upon login
-        if (localStorage.getItem("lbCart")) {
-          let transferStorageResponse = await axios.put(
-            "http://127.0.0.1:5005/cart/addMultiple",
-            {
-              customerId: customerId,
-              cartItems: customerCart,
-            },
-            { Authorization: `Bearer ${authToken["access_token"]}` }
-          );
+  // useEffect(() => {
+  //   // Get customer cart upon login
+  //   let getCustomerCart = async (customerId) => {
+  //     try {
+  //       // Transfer from localStorage to customer cart upon login
+  //       if (localStorage.getItem("lbCart")) {
+  //         let transferStorageResponse = await axios.put(
+  //           "http://127.0.0.1:5005/cart/addMultiple",
+  //           {
+  //             customerId: customerId,
+  //             cartItems: customerCart,
+  //           },
+  //           { Authorization: `Bearer ${authToken["access_token"]}` }
+  //         );
 
-          if (transferStorageResponse.status === 200) {
-            localStorage.removeItem("lbCart");
-          }
-        }
+  //         if (transferStorageResponse.status === 200) {
+  //           localStorage.removeItem("lbCart");
+  //         }
+  //       }
 
-        // Get customer cart upon login
-        let response = await axios.post("http://127.0.0.1:5005/cart/getCart", {
-          customerId: customerId,
-        });
+  //       // Get customer cart upon login
+  //       let response = await axios.post("http://127.0.0.1:5005/cart/getCart", {
+  //         customerId: customerId,
+  //       });
 
-        if (response.status === 200) {
-          let data = response.data;
-          setCustomerCart(data);
-        } else {
-          alert(response.statusText);
-        }
-      } catch (error) {
-        console.log("Error", error.message);
-      }
-    };
-    if (customerId) {
-      getCustomerCart(customerId);
-    }
-    console.log("App - Page Refresh", pageRefresh);
-  }, [customerId, pageRefresh]);
+  //       if (response.status === 200) {
+  //         let data = response.data;
+  //         setCustomerCart(data);
+  //       } else {
+  //         alert(response.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.log("Error", error.message);
+  //     }
+  //   };
+  //   if (customerId) {
+  //     getCustomerCart(customerId);
+  //   }
+  //   console.log("App - Page Refresh", pageRefresh);
+  // }, [customerId, pageRefresh]);
 
   //--------------------------------------------------------------------------------------------------------
   // Calculate Cart Total
