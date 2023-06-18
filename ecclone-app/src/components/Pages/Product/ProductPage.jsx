@@ -1,27 +1,30 @@
 import React, { useState, useEffect, useReducer, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import AuthContext from "../Context/AuthContext";
-import DataContext from "../Context/DataContext";
-import { useAxios } from "../CustomHooks/useAxios";
-import BreadCrumbs from "../Reusables/BreadCrumbs";
-import ProductColor from "../Shop/ProductColor";
-import ProductSizeBtn from "../Shop/ProductSizeBtn";
-import ProductQtyAlert from "../Shop/ProductQtyAlert";
-import ButtonSubmit from "../Reusables/ButtonSubmit";
+import AuthContext from "../../Context/AuthContext";
+import { useAxios } from "../../CustomHooks/useAxios";
+import BreadCrumbs from "../../Reusables/BreadCrumbs";
+import ProductColor from "../../Shop/ProductColor";
+import ProductSizeBtn from "../../Shop/ProductSizeBtn";
+import ProductQtyAlert from "../../Shop/ProductQtyAlert";
+import ButtonSubmit from "../../Reusables/ButtonSubmit";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCartAsync,
   postToLocalStorageCart,
-  postToCartAsync,
+  postMultipleToCartAsync,
   putToCartAsync,
-} from "../ReduxStore/CartReducer";
+} from "../../ReduxStore/CartReducer";
+import {
+  getProductByIdAsync,
+  getProductQtyByColor,
+} from "../../ReduxStore/ProductReducer";
 
 //--------------------------------------------------------------------------------------------------------
 // Function required for displaying images saved in Assets folder
 //--------------------------------------------------------------------------------------------------------
 function getImageUrl(name) {
-  return new URL(`../../assets/images/${name}.webp`, import.meta.url).href;
+  return new URL(`../../../assets/images/${name}.webp`, import.meta.url).href;
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -32,14 +35,15 @@ function isObject(value) {
 }
 
 //--------------------------------------------------------------------------------------------------------
-const Product = () => {
+const ProductPage = () => {
   const dispatch = useDispatch();
-  const { cart, status } = useSelector((state) => state.cart);
+  const { product: data } = useSelector((state) => state.product);
+  const quantityByColor = getProductQtyByColor(data);
 
   //------------------------------------------------------------------------------------------------------
   // States & Hooks
   //------------------------------------------------------------------------------------------------------
-  const { data, actionResponse, loading, error, fetchData } = useAxios();
+  const { /*data,*/ actionResponse, loading, error, fetchData } = useAxios();
   const param = useParams();
   const location = useLocation();
   const {
@@ -52,15 +56,10 @@ const Product = () => {
   // console.log("Product Page", location.state);
 
   // Context
-  const { user, userId: customerId } = useContext(AuthContext);
-  const { pageRefresh, setPageRefresh, setCustomerCart } =
-    useContext(DataContext);
+  const { user, userId: customerId, authToken } = useContext(AuthContext);
 
   // States
-  const [quantityByColor, setQuantityByColor] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
-  const [addToCart, setAddToCart] = useState(false);
-  const [editCart, setEditCart] = useState(false);
   const [selectedQty, setSelectedQty] = useState(
     formState === "edit" ? cartQuantity : 1
   );
@@ -121,13 +120,12 @@ const Product = () => {
   // - [addToCart/ editCart] : call 'cart/add' endpoint when user click on 'Add To Bag' button
   //--------------------------------------------------------------------------------------------------------
   useEffect(() => {
-    let endpoint = `/product/${param.productName}`;
-
-    let requestOptions = {
-      method: "POST",
-      data: { productCode: productCode },
-    };
-    fetchData(endpoint, requestOptions);
+    dispatch(
+      getProductByIdAsync({
+        productName: param.productName,
+        productCode: productCode,
+      })
+    );
   }, []);
 
   useEffect(() => {
@@ -144,96 +142,8 @@ const Product = () => {
             formState === "edit" ? cartProductSize : data?.stockOnHand[0].size,
         },
       });
-
-      //----------------------------------------------------------------------
-      // Calculate onHand quantity by color
-      let productQtyByColor = data.stockOnHand.reduce(
-        (quantityByColor, currentLine) => {
-          if (
-            quantityByColor.findIndex(
-              (element) => element.hexColor === currentLine.hexColor
-            ) === -1
-          ) {
-            quantityByColor.push({
-              hexColor: currentLine.hexColor,
-              quantity: parseInt(currentLine.quantity),
-            });
-          } else {
-            let i = quantityByColor.findIndex(
-              (element) => element.hexColor === currentLine.hexColor
-            );
-            quantityByColor[i] = {
-              ...quantityByColor[i],
-              quantity:
-                parseInt(quantityByColor[i].quantity) +
-                parseInt(currentLine.quantity),
-            };
-          }
-          return quantityByColor;
-        },
-        []
-      );
-
-      setQuantityByColor(productQtyByColor);
     }
   }, [data]);
-
-  //-------------------------------------------------------------------------------------------------------------------
-  useEffect(() => {
-    // Scenario 1: Customer adds to cart without login -> keep in localStorage
-    if (addToCart && customerId === null) {
-      let product = {
-        productCode: productCode,
-        productName: data?.productName,
-        productColor: optionState.hexColor,
-        productSize: optionState.size,
-        quantity: selectedQty,
-      };
-
-      dispatch(postToLocalStorageCart(product));
-      setAddToCart(false);
-    }
-    // Scenario 2: Customer adds to cart after login -> directly save to database
-    else if (addToCart && customerId !== null) {
-      let cartData = {
-        customerId: customerId,
-        productCode: productCode,
-        productName: data?.productName,
-        productColor: optionState.hexColor,
-        productSize: optionState.size,
-        quantity: selectedQty,
-      };
-
-      dispatch(postToCartAsync(cartData)).then(() =>
-        dispatch(getCartAsync(customerId))
-      );
-
-      // Refresh cart and reinstate state
-      setAddToCart(false);
-    }
-    // Scenario 3: Customer edits cart item through product page -> call editCart API
-    else if (editCart) {
-      let editEndpoint = `/cart/edit`;
-      let editCartData = {
-        customerId: customerId,
-        productCode: productCode,
-        productName: data?.productName,
-        oldProductColor: cartHexColor,
-        oldProductSize: cartProductSize,
-        oldQuantity: cartQuantity,
-        newProductColor: optionState.hexColor,
-        newProductSize: optionState.size,
-        newQuantity: selectedQty,
-      };
-
-      dispatch(putToCartAsync(editCartData)).then(() =>
-        dispatch(getCartAsync(customerId))
-      );
-
-      // Refresh cart and reinstate state
-      setEditCart(false);
-    }
-  }, [addToCart, editCart]);
 
   //-------------------------------------------------------------------------------------------------------------------
   // Handlers
@@ -241,12 +151,49 @@ const Product = () => {
     setSelectedQty(e.target.value);
   };
 
+  // Add product to cart
+  // (i) if customer is logged in, post to database
+  // (ii) if customer is not logged in, post to local storage
   const handleAddToCart = () => {
-    setAddToCart(true);
+    let header = authToken
+      ? { Authorization: `Bearer ${authToken["access_token"]}` }
+      : null;
+    let product = {
+      productCode: productCode,
+      productName: data?.productName,
+      productColor: optionState.hexColor,
+      productSize: optionState.size,
+      quantity: selectedQty,
+    };
+
+    formState !== "edit" && customerId === null
+      ? dispatch(postToLocalStorageCart(product))
+      : dispatch(
+          postMultipleToCartAsync({
+            cartData: { customerId, cartItems: [{ ...product }] },
+            header,
+          })
+        ).then(() => dispatch(getCartAsync(customerId)));
   };
 
+  // Edit product in cart
   const handleEditCart = () => {
-    setEditCart(true);
+    let editCartData = {
+      customerId: customerId,
+      productCode: productCode,
+      productName: data?.productName,
+      oldProductColor: cartHexColor,
+      oldProductSize: cartProductSize,
+      oldQuantity: cartQuantity,
+      newProductColor: optionState.hexColor,
+      newProductSize: optionState.size,
+      newQuantity: selectedQty,
+    };
+
+    dispatch(putToCartAsync(editCartData)).then(() => {
+      setEditCart(false);
+      dispatch(getCartAsync(customerId));
+    });
   };
 
   //-------------------------------------------------------------------------------------------------------------------
@@ -360,7 +307,7 @@ const Product = () => {
                   }
                   disabled={optionState.onHand <= 0}
                 />
-                <button className="border-[1px] border-fontExtraLightGrey rounded px-3">
+                <button className="block border-[1px] border-fontExtraLightGrey rounded px-3">
                   <MdOutlineFavoriteBorder />
                 </button>
               </div>
@@ -387,4 +334,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ProductPage;

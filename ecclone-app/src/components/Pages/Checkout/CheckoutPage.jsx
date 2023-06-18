@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
 import AuthContext from "../../Context/AuthContext";
 import DataContext from "../../Context/DataContext";
 import { useAxios } from "../../CustomHooks/useAxios";
@@ -11,6 +12,7 @@ import Backdrop from "../../Reusables/Backdrop";
 import ConfirmReceiptModal from "../../Cart/ConfirmReceiptModal";
 
 const CheckoutPage = () => {
+  const { cart } = useSelector((state) => state.cart);
   const {
     authToken,
     userId: customerId,
@@ -140,7 +142,7 @@ const CheckoutPage = () => {
                 }`}
               >
                 <p className="text-xs font-semibold tracking-widest pb-3">
-                  My Bag ({customerCart.length})
+                  My Bag ({cart.length})
                 </p>
                 <span
                   className={`ml-auto h-4 w-4 shrink-0 transition-transform duration-200 ease-in-out motion-reduce:transition-none ${
@@ -169,8 +171,8 @@ const CheckoutPage = () => {
               </div>
               {/* -------------------------- Items in Cart ------------------------------------- */}
               {showCart &&
-                customerCart.length > 0 &&
-                customerCart.map((item, index) => {
+                cart.length > 0 &&
+                cart.map((item, index) => {
                   return <CheckoutProductCart key={index} {...item} />;
                 })}
             </div>

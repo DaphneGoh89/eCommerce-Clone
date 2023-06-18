@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router";
 import Home from "../Pages/Home";
 import LoginWSignup from "../Pages/LoginWSignup";
 import Shop from "../Pages/Shop";
-import Product from "../Pages/Product";
+import ProductPage from "../Pages/Product/ProductPage";
 import PrivateRoutes from "../Utils/PrivateRoutes";
 import Favorites from "../Pages/Favorites";
 import CartPage from "../Pages/Cart/CartPage";
@@ -21,7 +21,7 @@ const AppRoutes = () => {
           <Route path="/home" element={<Home />}></Route> // WIP
           <Route path="/login" element={<LoginWSignup />}></Route>
           <Route path="/" element={<Shop />}></Route>
-          <Route path="/product/:productName" element={<Product />}></Route>
+          <Route path="/product/:productName" element={<ProductPage />}></Route>
         </Route>
         //---------------------------------------------------------------------
         // Private Routes
