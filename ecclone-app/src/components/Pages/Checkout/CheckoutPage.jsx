@@ -1,16 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
-import AuthContext from "../Context/AuthContext";
-import DataContext from "../Context/DataContext";
-import { useAxios } from "../CustomHooks/useAxios";
-import Heading1 from "../Reusables/Heading1";
-import CheckoutSummary from "../Cart/CheckoutSummary";
-import CheckoutProductCart from "../Cart/CheckoutProductCart";
-import CheckoutAddrForm from "../Cart/CheckoutAddrForm";
-import CheckoutDelvr from "../Cart/CheckoutDelvr";
-import Backdrop from "../Reusables/Backdrop";
-import ConfirmReceiptModal from "../Cart/ConfirmReceiptModal";
+import AuthContext from "../../Context/AuthContext";
+import DataContext from "../../Context/DataContext";
+import { useAxios } from "../../CustomHooks/useAxios";
+import Heading1 from "../../Reusables/Heading1";
+import CheckoutSummary from "../../Cart/CheckoutSummary";
+import CheckoutProductCart from "../../Cart/CheckoutProductCart";
+import CheckoutAddrForm from "../../Cart/CheckoutAddrForm";
+import CheckoutDelvr from "../../Cart/CheckoutDelvr";
+import Backdrop from "../../Reusables/Backdrop";
+import ConfirmReceiptModal from "../../Cart/ConfirmReceiptModal";
 
-const Checkout = () => {
+const CheckoutPage = () => {
   const {
     authToken,
     userId: customerId,
@@ -204,4 +204,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default CheckoutPage;
